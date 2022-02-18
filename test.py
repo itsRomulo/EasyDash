@@ -1,1 +1,1 @@
-import 
+print('Que os jogos comecem!')
