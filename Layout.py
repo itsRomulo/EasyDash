@@ -8,7 +8,6 @@ from dash.html.Title import Title
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components._components.Navbar import Navbar
-from pyparsing import line
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
