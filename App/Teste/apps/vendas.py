@@ -216,5 +216,5 @@ linha2_grafico = dbc.CardGroup(
 
 
 
-layout =html.Div([navbar, Primeiras_Informacoes, linha1_grafico, linha2_grafico]) 
+layout =html.Div([Primeiras_Informacoes, linha1_grafico, linha2_grafico]) 
 

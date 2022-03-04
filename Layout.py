@@ -61,7 +61,9 @@ navbar = dbc.Navbar(dbc.Container(
             #     navbar=True,
                 
             # ),
-            dbc.NavItem(dbc.NavLink("Page 1", href="#")),
+            dbc.NavItem(dbc.NavLink("Page 1", href="#"),
+            (dbc.NavLink("Page 2", href="#")),
+            ),
         ]
     ),
     color="primary",
