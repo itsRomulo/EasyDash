@@ -12,7 +12,33 @@ from app import server
 # Connect to your app pages
 from apps import vendas, produto, home, notfound
 
+nav_link1 = {
+    "color": "white",
+    "textAlign": "right",
+    "fontSize": 15,
+    "marginLeft": "600",
+    "backgroundColor": "black",
+}
 
+nav_link2 = {
+    "color": "white",
+    "textAlign": "right",
+    "fontSize": 15,
+    "marginRight": "50",
+    "backgroundColor": "black",
+}
+
+nav_name = {
+    "color": "white",
+    "textAlign": "left",
+    "fontSize": 18,
+    "margin": "auto",
+    "fontFamily": "cursive",
+    #"backgroundColor": "red",
+}
+
+nav_item_01 = dbc.NavLink('Vendas', href='/apps/vendas') 
+nav_item_02 = dbc.NavLink('Produtos', href='/apps/produto')
 
 navbar = dbc.Navbar(dbc.Container(
          [
@@ -20,8 +46,8 @@ navbar = dbc.Navbar(dbc.Container(
                  # Use row and col to control vertical alignment of logo / brand
                  dbc.Row(
                      [
-                         #dbc.Col(html.Img(src=EASYDASH, height="40px")),
-                         dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2")),
+                         dbc.Col(html.Img(src='/assets/EasyDash.png', height="20px")),
+                         dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2", style=nav_name)),
                         
                      ],
                      align="center",
@@ -31,9 +57,15 @@ navbar = dbc.Navbar(dbc.Container(
                  href="/",
                  style={"textDecoration": "none"},
              ),
+             dbc.Nav([
+                                               nav_item_01,nav_item_02
+                                             ],
+                                             
+                                             className="ms-auto",
+                                             navbar=True,
+                                            ),
          
-            dbc.NavLink('Vendas', href='/apps/vendas', style={"color":"FFFFF"}), 
-            dbc.NavLink('Produtos', href='/apps/produto'),
+            
          ]
      ),
      color="primary",

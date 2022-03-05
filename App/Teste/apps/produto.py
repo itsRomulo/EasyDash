@@ -38,73 +38,73 @@ fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
                            center={"lat": 45.5517, "lon": -73.7073},
                            mapbox_style="carto-positron", zoom=9)
 
-navbar = dbc.Navbar(dbc.Container(
-        [
-            html.A(
-                # Use row and col to control vertical alignment of logo / brand
-                dbc.Row(
-                    [
-                        dbc.Col(html.Img(src=EASYDASH, height="40px")),
-                        dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2")),
+# navbar = dbc.Navbar(dbc.Container(
+#         [
+#             html.A(
+#                 # Use row and col to control vertical alignment of logo / brand
+#                 dbc.Row(
+#                     [
+#                         dbc.Col(html.Img(src=EASYDASH, height="40px")),
+#                         dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2")),
                         
-                    ],
-                    align="center",
-                    className="g-0",
+#                     ],
+#                     align="center",
+#                     className="g-0",
                     
-                ),
-                href="https://plotly.com",
-                style={"textDecoration": "none"},
-            ),
-            # dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
-            # dbc.Collapse(
+#                 ),
+#                 href="https://plotly.com",
+#                 style={"textDecoration": "none"},
+#             ),
+#             # dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+#             # dbc.Collapse(
                 
-            #     id="navbar-collapse",
-            #     is_open=False,
-            #     navbar=True,
+#             #     id="navbar-collapse",
+#             #     is_open=False,
+#             #     navbar=True,
                 
-            # ),
-            dbc.NavItem(dbc.NavLink("Page 1", href="#")),
-        ]
-    ),
-    color="primary",
-    dark=True
+#             # ),
+#             dbc.NavItem(dbc.NavLink("Page 1", href="#")),
+#         ]
+#     ),
+#     color="primary",
+#     dark=True
     
-)
+# )
 
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()
 
 
 
-dropdown1 = dcc.Dropdown(id='dia_semana_mes_ano',
-                         options=[
-                             {'label':'Todo período', 'value':'All'},
-                             {'label':'Dia', 'value':'dia'},
-                             {'label':'Semana', 'value':'semana'},
-                             {'label':'Meses', 'value':'meses'},
-                             {'label':'Ano', 'value':'ano'}
-                         ],
-                         value='All'
+# dropdown1 = dcc.Dropdown(id='dia_semana_mes_ano',
+#                          options=[
+#                              {'label':'Todo período', 'value':'All'},
+#                              {'label':'Dia', 'value':'dia'},
+#                              {'label':'Semana', 'value':'semana'},
+#                              {'label':'Meses', 'value':'meses'},
+#                              {'label':'Ano', 'value':'ano'}
+#                          ],
+#                          value='All'
                          
-                        )
+#                         )
 
-dropdown2 = dcc.Dropdown(id='dia_semana_mes_ano2',
-                         options=[
-                             {'label':'Todo período', 'value':'All'}
+# dropdown2 = dcc.Dropdown(id='dia_semana_mes_ano2',
+#                          options=[
+#                              {'label':'Todo período', 'value':'All'}
                              
-                         ],
-                         value='All'
-                        )
+#                          ],
+#                          value='All'
+#                         )
 
 
-row_dropdown = dbc.Row(
-    [
-         dbc.Col(dropdown1, width=6),
-        dbc.Col(dropdown2, width=6),
+# row_dropdown = dbc.Row(
+#     [
+#          dbc.Col(dropdown1, width=6),
+#         dbc.Col(dropdown2, width=6),
         
-    ]
+#     ]
      
-)
+# )
 
 
 Primeiras_Informacoes = dbc.CardGroup(
@@ -112,9 +112,9 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$ 27.420,10", className="card-title"),
+                    html.H3("R$ 0,00 ", className="card-title"),
                     html.P(
-                        "Lucro Total",
+                        "Quantidade de Produtos Vendidos",
                         
                         className="card-text",
                     ),
@@ -125,9 +125,9 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("8.954", className="card-title"),
+                    html.H3("?", className="card-title"),
                     html.P(
-                        "Quantidade de Vendas",
+                        "Principal Categoria Vendida",
                         
                         className="card-text")
                 ]
@@ -136,9 +136,9 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$ 200,00", className="card-title"),
+                    html.H3("?", className="card-title"),
                     html.P(
-                        "Valor Médio de Venda",
+                        "Principal Marca Vendida",
                         
                         className="card-text")
                 ]
@@ -154,7 +154,7 @@ linha1_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Lucro x Ano", className="card-title"),
+                    html.H5("Vendas por categoria", className="card-title"),
                      dcc.Graph(
                     id='example-graph6',
                     figure=fig
@@ -168,7 +168,7 @@ linha1_grafico = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H5("Vendas x Ano", className="card-title"),
+                    html.H5("Vendas por marca", className="card-title"),
                     dcc.Graph(
                     id='example-graph3',
                     figure=fig3
@@ -191,7 +191,7 @@ linha2_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Vendas x Canal", className="card-title"),
+                    html.H5("Top 10 produtos", className="card-title"),
                      dcc.Graph(
                     id='example-graph4',
                     figure=fig2
@@ -205,7 +205,7 @@ linha2_grafico = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H5("Vendas x Região", className="card-title"),
+                    html.H5("Produtos por Região", className="card-title"),
                     dcc.Graph(
                     id='example-graph5',
                     figure=fig4
@@ -221,5 +221,5 @@ linha2_grafico = dbc.CardGroup(
 )
 
 
-layout =html.Div([navbar, row_dropdown, Primeiras_Informacoes, linha1_grafico, linha2_grafico]) 
+layout =html.Div([Primeiras_Informacoes, linha1_grafico, linha2_grafico]) 
 
