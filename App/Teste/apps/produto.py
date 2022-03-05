@@ -19,9 +19,9 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 EASYDASH = "https://romulobrandao.com/EasyDash.png"
 
 df = pd.DataFrame({
-    "Produto": ["Camisa", "Bermuda", "Tênis", "Camisa", "Bermuda", "Tênis"],
+    "Marca": ["Nike", "Adidas", "Lacoste", "Nike", "Adidas", "Lacoste"],
     "Quantidade": [5, 2, 3, 3, 5, 6],
-    "Cidade": ["SP", "SP", "SP", "RJ", "RJ", "RJ"]
+    #"Cidade": ["SP", "SP", "SP", "RJ", "RJ", "RJ"]
 })
 df2 = px.data.tips()
 df3 = px.data.gapminder().query("country=='Canada'")
@@ -29,14 +29,51 @@ df3 = px.data.gapminder().query("country=='Canada'")
 df4 = px.data.election()
 geojson = px.data.election_geojson()
 
+fig = go.Figure()
 
-fig = px.bar(df, x="Produto", y="Quantidade", color="Cidade", barmode="group")
-fig2 = px.pie(df2, values='tip', names='day')
-fig3 = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
+fig.add_trace(go.Bar(
+    x=["Camisas", "Camisetas", "Bermudas", "Tênis"],
+    y=[3, 2, 1, 4]
+))
+
+fig.update_layout(
+    #autosize=False,
+    # width=500,
+    # height=500,
+    yaxis=dict(
+        #title_text="Y-axis Title",
+        #ticktext=["Very long label", "long label", "3", "label"],
+        tickvals=[1, 2, 3, 4],
+        tickmode="array",
+        #titlefont=dict(size=30),
+    )
+)
+
+# fig.update_yaxes(automargin=True)
+
+# fig.show()
+#fig = px.bar(df, x="Produto", y="Quantidade", color="Cidade", barmode="group")
+
+fig2 = go.Figure(go.Bar(
+            x=[20, 14, 23, 30, 6, 27, 18, 9, 20, 13],
+            y=['Camisas', 'Bermudas', 'Tênis', 'Camisetas', 'Cueca', 'Chinelo', 'Boné', 'Perfume', 'Relógio', 'Mochila'],
+            orientation='h'))
+#fig2 = px.pie(df2, values='tip', names='day')
+
+labels = ['Nike','Adidas','Lacoste','Outros']
+values = [4500, 4000, 1053, 500]
+
+fig3 = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
+                             insidetextorientation='radial'
+                            )])
+
+#fig = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
+
 fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
                            locations="district", featureidkey="properties.district",
                            center={"lat": 45.5517, "lon": -73.7073},
                            mapbox_style="carto-positron", zoom=9)
+
 
 # navbar = dbc.Navbar(dbc.Container(
 #         [
@@ -167,14 +204,14 @@ linha1_grafico = dbc.CardGroup(
         ),
         dbc.Card(
             dbc.CardBody(
-                [
-                    html.H5("Vendas por marca", className="card-title"),
-                    dcc.Graph(
-                    id='example-graph3',
-                    figure=fig3
-                ),
+                [   html.H5("Top 10 produtos", className="card-title"),
+                     dcc.Graph(
+                    id='example-graph4',
+                    figure=fig2
+                    ),
                     dbc.Button(
                         "Exportar", className="mt-auto"
+                    
                     ),
                 ]
             )
@@ -191,11 +228,11 @@ linha2_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Top 10 produtos", className="card-title"),
-                     dcc.Graph(
-                    id='example-graph4',
-                    figure=fig2
-                    ),
+                    html.H5("Vendas por marca", className="card-title"),
+                    dcc.Graph(
+                    id='example-graph3',
+                    figure=fig3
+                ),
                     dbc.Button(
                         "Exportar", className="mt-auto"
                     ),
