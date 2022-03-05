@@ -11,6 +11,9 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 
+import json
+from urllib.request import urlopen
+
 df = pd.DataFrame({
     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
     "Amount": [4, 1, 2, 2, 4, 5],
@@ -26,10 +29,47 @@ geojson = px.data.election_geojson()
 fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 fig2 = px.pie(df2, values='tip', names='day')
 fig3 = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
-fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
-                           locations="district", featureidkey="properties.district",
-                           center={"lat": 45.5517, "lon": -73.7073},
-                           mapbox_style="carto-positron", zoom=9)
+#fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
+ #                          locations="district", featureidkey="properties.district",
+  #                         center={"lat": 45.5517, "lon": -73.7073},
+   #                        mapbox_style="carto-positron", zoom=9)
+
+df5 = px.data.stocks(indexed=True)-1
+fig5 = px.area(df5, facet_col="company", facet_col_wrap=2)
+
+df6 = px.data.tips()
+fig6 = px.histogram(df6, x="total_bill")
+
+fig7 = px.choropleth(locations=["CA", "TX", "NY"], locationmode="USA-states", color=[1,2,3], scope="usa")
+
+def map_graph():
+    with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson') as response:
+        Brazil = json.load(response) # Javascrip object notation 
+
+        state_id_map = {}
+        for feature in Brazil ['features']:
+            feature['id'] = feature['properties']['name']
+            state_id_map[feature['properties']['sigla']] = feature['id']
+
+        brazil = pd.read_csv('brazil.csv')
+        print(brazil)    
+
+        fig = px.choropleth(
+        brazil, #soybean database
+        locations = "Estado", #define the limits on the map/geography
+        geojson = Brazil, #shape information
+        color = "Vendas", #defining the color of the scale through the database
+        hover_name = "Estado", #the information in the box
+        hover_data =["Vendas","Longitude","Latitude"],
+        #title of the map
+        #animation_frame = "ano" #creating the application based on the year
+        )
+        fig.update_geos(fitbounds = "locations", visible = False)
+        return fig
+
+fig4 = map_graph()
+
+
 
 navbar = dbc.Navbar(dbc.Container(
         [
@@ -107,7 +147,7 @@ Primeiras_Informacoes = dbc.CardGroup(
                 [
                     html.H3("R$ 27.420,10", className="card-title"),
                     html.P(
-                        "Lucro Total",
+                        "Valor Total de Vendas",
                         
                         className="card-text",
                     ),
@@ -118,9 +158,31 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("8.954", className="card-title"),
+                    html.H3("R$16.125,12", className="card-title"),
                     html.P(
-                        "Quantidade de Vendas",
+                        "Lucro Total",
+                        
+                        className="card-text")
+                ]
+            )
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H3("58%", className="card-title"),
+                    html.P(
+                        "Margem de Lucro",
+                        
+                        className="card-text")
+                ]
+            )
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H3("721", className="card-title"),
+                    html.P(
+                        "Quantidade de Pedidos",
                         
                         className="card-text")
                 ]
@@ -131,7 +193,7 @@ Primeiras_Informacoes = dbc.CardGroup(
                 [
                     html.H3("R$ 200,00", className="card-title"),
                     html.P(
-                        "Valor Médio de Venda",
+                        "Valor Médio de Pedidos",
                         
                         className="card-text")
                 ]
@@ -147,7 +209,7 @@ linha1_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Lucro x Ano", className="card-title"),
+                    html.H5("Vendas x Ano", className="card-title"),
                      dcc.Graph(
                     id='example-graph6',
                     figure=fig
@@ -159,9 +221,24 @@ linha1_grafico = dbc.CardGroup(
             )
         ),
         dbc.Card(
+            
             dbc.CardBody(
                 [
-                    html.H5("Vendas x Ano", className="card-title"),
+                    html.H5("Vendas x Mês", className="card-title"),
+                     dcc.Graph(
+                    id='example-graph7',
+                    figure=fig6
+                ),
+                    dbc.Button(
+                        "Exportar", className="mt-auto"
+                    ),
+                ]
+            )
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H5("Vendas x Semana", className="card-title"),
                     dcc.Graph(
                     id='example-graph3',
                     figure=fig3
@@ -180,6 +257,21 @@ linha1_grafico = dbc.CardGroup(
 
 linha2_grafico = dbc.CardGroup(
     [
+        dbc.Card(
+            
+            dbc.CardBody(
+                [
+                    html.H5("Vendas x Dia", className="card-title"),
+                     dcc.Graph(
+                    id='example-graph8',
+                    figure=fig5
+                    ),
+                    dbc.Button(
+                        "Exportar", className="mt-auto"
+                    ),
+                ]
+            )
+        ),
         dbc.Card(
             
             dbc.CardBody(
@@ -204,11 +296,33 @@ linha2_grafico = dbc.CardGroup(
                     figure=fig4
                 ),
                     dbc.Button(
-                        "Click here", className="mt-auto"
+                        "Exportar", className="mt-auto"
                     ),
                 ]
             )
         )
+        
+    ]
+)
+
+linha3_grafico = dbc.CardGroup(
+    [
+        dbc.Card(
+            
+            dbc.CardBody(
+                [
+                    html.H5("Vendas x Vendedor", className="card-title"),
+                     dcc.Graph(
+                    id='example-graph9',
+                    figure=fig
+                    ),
+                    dbc.Button(
+                        "Exportar", className="mt-auto"
+                    ),
+                ]
+            )
+        ),
+        
         
     ]
 )
