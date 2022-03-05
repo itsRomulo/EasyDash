@@ -1,4 +1,15 @@
 {
-    "originPath": "./00Entrada/2JR_20220221.xlsx",
-    "sheetOrigin": "Planilha1"
+    "dados":{
+       "originPath":"./00Entrada/",
+       "sheetOrigin":"Planilha1"
+    },
+    "bancodedados":{
+        "host":"localhost",
+        "database":"EasyDash",
+        "user":"postgres",
+        "password":"postgres",
+        "tblStage":"stg_2jr",
+        "tblHistorico":"historico_2jr",
+        "tblER":""
+    }
 }
