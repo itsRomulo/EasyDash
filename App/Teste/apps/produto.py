@@ -55,10 +55,11 @@ fig.update_layout(
 # fig.show()
 #fig = px.bar(df, x="Produto", y="Quantidade", color="Cidade", barmode="group")
 
-fig2 = go.Figure(go.Bar(
-            x=[20, 14, 23, 30, 6, 27, 18, 9, 20, 13],
-            y=['Camisas', 'Bermudas', 'Tênis', 'Camisetas', 'Cueca', 'Chinelo', 'Boné', 'Perfume', 'Relógio', 'Mochila'],
-            orientation='h'))
+fig2 = pedidoGraf.montaGraficoTop10()
+# fig2 = go.Figure(go.Bar(
+#             x=[20, 14, 23, 30, 6, 27, 18, 9, 20, 13],
+#             y=['Camisas', 'Bermudas', 'Tênis', 'Camisetas', 'Cueca', 'Chinelo', 'Boné', 'Perfume', 'Relógio', 'Mochila'],
+#             orientation='h'))
 #fig2 = px.pie(df2, values='tip', names='day')
 
 labels = ['Nike','Adidas','Lacoste','Outros']
