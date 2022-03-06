@@ -14,6 +14,7 @@ from dash.html import I
 from dash.html.Img import Img
 from dash.html.Title import Title
 from dash.dependencies import Input, Output, State
+import montaGraficoPedidos as pedidoGraf
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 EASYDASH = "https://romulobrandao.com/EasyDash.png"
@@ -75,81 +76,19 @@ fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
                            mapbox_style="carto-positron", zoom=9)
 
 
-# navbar = dbc.Navbar(dbc.Container(
-#         [
-#             html.A(
-#                 # Use row and col to control vertical alignment of logo / brand
-#                 dbc.Row(
-#                     [
-#                         dbc.Col(html.Img(src=EASYDASH, height="40px")),
-#                         dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2")),
-                        
-#                     ],
-#                     align="center",
-#                     className="g-0",
-                    
-#                 ),
-#                 href="https://plotly.com",
-#                 style={"textDecoration": "none"},
-#             ),
-#             # dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
-#             # dbc.Collapse(
-                
-#             #     id="navbar-collapse",
-#             #     is_open=False,
-#             #     navbar=True,
-                
-#             # ),
-#             dbc.NavItem(dbc.NavLink("Page 1", href="#")),
-#         ]
-#     ),
-#     color="primary",
-#     dark=True
-    
-# )
-
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()
 
 
-
-# dropdown1 = dcc.Dropdown(id='dia_semana_mes_ano',
-#                          options=[
-#                              {'label':'Todo período', 'value':'All'},
-#                              {'label':'Dia', 'value':'dia'},
-#                              {'label':'Semana', 'value':'semana'},
-#                              {'label':'Meses', 'value':'meses'},
-#                              {'label':'Ano', 'value':'ano'}
-#                          ],
-#                          value='All'
-                         
-#                         )
-
-# dropdown2 = dcc.Dropdown(id='dia_semana_mes_ano2',
-#                          options=[
-#                              {'label':'Todo período', 'value':'All'}
-                             
-#                          ],
-#                          value='All'
-#                         )
-
-
-# row_dropdown = dbc.Row(
-#     [
-#          dbc.Col(dropdown1, width=6),
-#         dbc.Col(dropdown2, width=6),
-        
-#     ]
-     
-# )
-
+cP, pC, pM = pedidoGraf.montaIndicadores()
+cP = str(cP)
 
 Primeiras_Informacoes = dbc.CardGroup(
     [
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$ 0,00 ", className="card-title"),
+                    html.H3( cP, className="card-title"),
                     html.P(
                         "Quantidade de Produtos Vendidos",
                         
@@ -162,7 +101,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("?", className="card-title"),
+                    html.H3(pC, className="card-title"),
                     html.P(
                         "Principal Categoria Vendida",
                         
@@ -173,7 +112,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("?", className="card-title"),
+                    html.H3(pM, className="card-title"),
                     html.P(
                         "Principal Marca Vendida",
                         

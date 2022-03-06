@@ -10,7 +10,7 @@ from app import app
 from app import server
 
 # Connect to your app pages
-from apps import vendas, produto, home, notfound, montaGraficoVendas
+from apps import vendas, produto, home, notfound, montaGraficoVendas, montaGraficoPedidos
 
 
 nav_link1 = {
