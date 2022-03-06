@@ -10,7 +10,8 @@ from app import app
 from app import server
 
 # Connect to your app pages
-from apps import vendas, produto, home, notfound
+from apps import vendas, produto, home, notfound, montaGraficoVendas
+
 
 nav_link1 = {
     "color": "white",

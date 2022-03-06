@@ -10,9 +10,11 @@ from dash_bootstrap_components._components.Navbar import Navbar
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
+import montaGraficoVendas 
 
 import json
 from urllib.request import urlopen
+
 
 df = pd.DataFrame({
     "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
@@ -71,81 +73,37 @@ fig4 = map_graph()
 
 
 
-navbar = dbc.Navbar(dbc.Container(
-        [
-            html.A(
-                # Use row and col to control vertical alignment of logo / brand
-                dbc.Row(
-                    [
-                        #dbc.Col(html.Img(src=EASYDASH, height="40px")),
-                        dbc.Col(dbc.NavbarBrand("2JR Multimarcas", className="ms-2")),
-                        
-                    ],
-                    align="center",
-                    className="g-0",
-                    
-                ),
-                href="https://plotly.com",
-                style={"textDecoration": "none"},
-            ),
-            # dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
-            # dbc.Collapse(
-                
-            #     id="navbar-collapse",
-            #     is_open=False,
-            #     navbar=True,
-                
-            # ),
-            dbc.NavItem(dbc.NavLink("Page 1", href="#")),
-        ]
-    ),
-    color="primary",
-    dark=True
-    
-)
+
 
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()
 
 
 
-dropdown1 = dcc.Dropdown(id='dia_semana_mes_ano',
-                         options=[
-                             {'label':'Todo período', 'value':'All'},
-                             {'label':'Dia', 'value':'dia'},
-                             {'label':'Semana', 'value':'semana'},
-                             {'label':'Meses', 'value':'meses'},
-                             {'label':'Ano', 'value':'ano'}
-                         ],
-                         value='All'
-                         
-                        )
-
-dropdown2 = dcc.Dropdown(id='dia_semana_mes_ano2',
-                         options=[
-                             {'label':'Todo período', 'value':'All'}
-                             
-                         ],
-                         value='All'
-                        )
 
 
-row_dropdown = dbc.Row(
-    [
-         dbc.Col(dropdown1, width=6),
-        dbc.Col(dropdown2, width=6),
-        
-    ]
-     
-)
+vT,sL,mM,cP,mP = montaGraficoVendas.montaIndicadores()
+vT = int(vT)
+vT = '{0:,}'.format(vT).replace(',','.')
+vT = 'R$ '+vT+',00'
 
+sL = int(sL)
+sL = '{0:,}'.format(sL).replace(',','.')
+sL = 'R$ '+sL+',00'
 
+mM = format(mM).replace('.',',')
+mM = mM + '%'
+
+cP = str(cP)
+
+mP = format(mP).replace('.',',')
+mP = 'R$ ' +mP
 Primeiras_Informacoes = dbc.CardGroup(
     [
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$ 27.420,10", className="card-title"),
+                    html.H3(''+vT+'', className="card-title"),
                     html.P(
                         "Valor Total de Vendas",
                         
@@ -158,7 +116,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$16.125,12", className="card-title"),
+                    html.H3(''+sL+'', className="card-title"),
                     html.P(
                         "Lucro Total",
                         
@@ -169,7 +127,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("58%", className="card-title"),
+                    html.H3(''+mM+'', className="card-title"),
                     html.P(
                         "Margem de Lucro",
                         
@@ -180,7 +138,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("721", className="card-title"),
+                    html.H3(''+cP+'', className="card-title"),
                     html.P(
                         "Quantidade de Pedidos",
                         
@@ -191,7 +149,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3("R$ 200,00", className="card-title"),
+                    html.H3(''+mP+'', className="card-title"),
                     html.P(
                         "Valor Médio de Pedidos",
                         
