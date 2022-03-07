@@ -6,6 +6,7 @@ import json
 import openpyxl
 import psycopg2
 from datetime import date
+import pFuncoes as fun
 
 #===================================================================================================== 
 # Funções globais
@@ -30,6 +31,7 @@ host_bd      = param['bancodedados']['host']
 database_bd  = param['bancodedados']['database']
 user_bd      = param['bancodedados']['user']
 password_bd  = param['bancodedados']['password']
+port_bd      = param['bancodedados']['port']
 tblStage     = param['bancodedados']['tblStage']
 tblHistorico = param['bancodedados']['tblHistorico']
 tblER        = param['bancodedados']['tblER']
@@ -45,7 +47,8 @@ def conecta_bd():
   con = psycopg2.connect(host=host_bd , 
                          database=database_bd,
                          user=user_bd, 
-                         password=password_bd)
+                         password=password_bd,
+                         port=port_bd)
   return con
 
 def inserir_bd(sql):
@@ -98,6 +101,7 @@ def Main():
     df['Data']=df['Data'].dt.strftime('%d/%m/%Y')
 
     truncate(tblStage)
+    truncate(tblHistorico)
 
     for i in df.index:
         sql = "INSERT INTO public."+tblStage+"(data_venda, cod_venda, cod_produto, cod_vendedor, nome_vendedor, categoria_produto, marca_produto, modelo_produto, valor_produto, custo_produto, lucro_venda, cod_cliente, nome_cliente, idade_cliente, uf_venda, sexo_cliente)"
