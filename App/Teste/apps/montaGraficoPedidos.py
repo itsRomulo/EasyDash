@@ -7,8 +7,8 @@ def conecta_bd():
   con = psycopg2.connect(host="localhost", 
                          database="tcc",
                          user="postgres", 
-                         password="256980Jf",
-                         port="5432")
+                         password="17571946735",
+                         port="5433")
   return con
 
 
@@ -38,6 +38,7 @@ def montaGraficoTop10():
     return fig
 
 def montaIndicadores():
+
     sql_contaProdutos = 'select count(cod_venda) from historico_2jr'
     sql_principalCategoria = 'SELECT count(categoria_produto), categoria_produto FROM historico_2jr GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC' 
     sql_principalMarca = 'SELECT count(marca_produto), marca_produto FROM historico_2jr GROUP BY marca_produto HAVING COUNT(marca_produto) > 1 ORDER BY count(marca_produto) DESC'
@@ -57,3 +58,4 @@ def montaIndicadores():
     qtd_pM = df_pM['Marca'][0]
 
     return qtd_cP, qtd_pC, qtd_pM
+

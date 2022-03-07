@@ -7,8 +7,8 @@ def conecta_bd():
   con = psycopg2.connect(host="localhost", 
                          database="tcc",
                          user="postgres", 
-                         password="256980Jf",
-                         port="5432")
+                         password="17571946735",
+                         port="5433")
   return con
 
 

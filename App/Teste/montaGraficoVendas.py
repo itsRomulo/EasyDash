@@ -7,8 +7,8 @@ def conecta_bd():
   con = psycopg2.connect(host="localhost", 
                          database="tcc",
                          user="postgres", 
-                         password="256980Jf",
-                         port="5432")
+                         password="17571946735",
+                         port="5433")
   return con
 
 
@@ -45,6 +45,20 @@ def montaIndicadores():
 
   
   return df_vT['Valor Total'][0], df_sL['Valor Total'][0],df_mM['Valor Total'][0],df_cP['Valor Total'][0],df_mP['Valor Total'][0]
+
+def montaGraficoVxA():
+  sql = 'select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4)'
+  VxA = consulta_bd(sql)
+  df_vA = pd.DataFrame(VxA, columns=['Valor','Ano'])
+  fig = px.bar(df_vA, x="Ano", y="Valor")
+  
+  return fig
+
+
+
+
+
+
 
 # vendasInternet = consulta_bd("select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1'")
 # vendasFisica = consulta_bd("select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1'")
