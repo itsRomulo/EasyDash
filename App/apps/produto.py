@@ -175,7 +175,7 @@ linha2_grafico = dbc.CardGroup(
                     html.H5("Vendas por marca", className="card-title"),
                     dcc.Graph(
                     id='example-graph3',
-                    figure=fig2
+                    figure=fig3
                 ),
                     dbc.Button(
                         "Exportar", className="mt-auto"

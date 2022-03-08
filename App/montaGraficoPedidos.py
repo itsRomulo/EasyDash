@@ -76,8 +76,10 @@ def montaGraficoVendasMarca():
 
     values = [df_vM['Quantidade']]
 
-    fig3 = px.pie(df_vM, values='Quantidade', names='Marca')
+    fig = px.pie(df_vM, values='Quantidade', names='Marca')
 
-    fig3.show()
+    #
 
-montaGraficoVendasMarca()
+    return fig
+
+# montaGraficoVendasMarca()
