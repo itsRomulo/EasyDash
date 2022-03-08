@@ -4,9 +4,10 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
+
 def conecta_bd():
   con = psycopg2.connect(host="localhost", 
-                         database="tcc",
+                         database="EasyDash",
                          user="postgres", 
                          password="17571946735",
                          port="5433")
@@ -100,27 +101,31 @@ def montaGraficoVxS():
   dfsemana = pd.concat([df_s1, df_s2, df_s3, df_s4], axis=1)
   dfFinal = pd.DataFrame()
   #dfsemana = pd.DataFrame("["+df_s1['Semana 1'][0]+ "," +df_s2['Semana 2'][0]+ "," +df_s3['Semana 3'][0]+","+df_s4['Semana 4'][0]+"]", columns=['Semana 1','Semana 2','Semana 3','Semana 4'])
-  print(dfsemana)
+  
   #fig = px.bar(dfsemana, x="Semana 1", title='Life expectancy in Canada')
   fig = px.bar(y=[df_s1['Semana 1'][0],df_s2['Semana 2'][0],df_s3['Semana 3'][0],df_s4['Semana 4'][0]], x=['Semana 1', 'Semana 2', 'Semana 3','Semana 4'], title="Mês Referente:"+mesAtual)
 
+  return fig
+
+def montaGraficoVxD():
+  mesAtual = datetime.now().strftime('%m')
+  anoAtual = datetime.now().strftime('%Y')
+  sql = "select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '"+anoAtual+"' and substring(data_venda, 4, 2) = '"+mesAtual+"' group by data_venda"
+  diasMes = consulta_bd(sql)
+  df_dM = pd.DataFrame(diasMes, columns=['Data','Valor Vendido'])
+  fig = px.bar(df_dM, x='Data', y='Valor Vendido')
   fig.show()
 
-montaGraficoVxS()
-
-
-
-# vendasInternet = consulta_bd("select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1'")
-# vendasFisica = consulta_bd("select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1'")
-
-
-# # This dataframe has 244 lines, but 4 distinct values for `day`
-# #d = {'canal':['Internet','Loja Física'], 'qtd':[50,40]
-# vI = int(vendasInternet['ValorTotal'])
-# vF = int(vendasFisica['ValorTotal'])
-# lst = [["Internet",+vI],["Loja Fisica",+vF]] 
-# df = pd.DataFrame(lst, columns = ['Canal','qtd'])
-# fig = px.pie(df, values='qtd', names='Canal')
-# fig.show()
+def montaGraficoVxC():
+  sql_internet = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1'"
+  sql_lojafisica = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1'"
+  vI = consulta_bd(sql_internet)
+  vLF = consulta_bd(sql_lojafisica)
+  df_vI = pd.DataFrame(vI, columns=['Internet'])
+  df_vLF = pd.DataFrame(vLF, columns=['Loja Fisica'])
+  dfcanal = pd.concat([df_vI, df_vLF], axis=1)
+  fig = px.pie(values=[dfcanal['Internet'][0], dfcanal['Loja Fisica'][0]], names=['Internet', 'Loja Fisica'])
+  
+  return fig
 
 
