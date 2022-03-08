@@ -33,7 +33,6 @@ password_bd  = param['bancodedados']['password']
 port_bd      = param['bancodedados']['port']
 tblStage     = param['bancodedados']['tblStage']
 tblHistorico = param['bancodedados']['tblHistorico']
-tblER        = param['bancodedados']['tblER']
 
 #===================================================================================================== 
 # Funções para o programa

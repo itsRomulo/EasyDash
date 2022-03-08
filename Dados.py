@@ -34,7 +34,6 @@ password_bd  = param['bancodedados']['password']
 port_bd      = param['bancodedados']['port']
 tblStage     = param['bancodedados']['tblStage']
 tblHistorico = param['bancodedados']['tblHistorico']
-tblER        = param['bancodedados']['tblER']
 
 #===================================================================================================== 
 # Funções para o programa
@@ -91,7 +90,7 @@ def consulta_bd(sql):
 #===================================================================================================== 
 # Função Principal
 def Main():
-    df = excel_reader('./00Entrada/'+diamesano()+'_2JR_Multimarcas.xlsx') # lendo xlsx origem
+    df = excel_reader(arqOrigem ) # lendo xlsx origem
     for col in df: #renomeando colunas
         ncol = col.replace(' ','_')
         df.rename(columns = {col: ncol}, inplace = True)
@@ -101,7 +100,7 @@ def Main():
     df['Data']=df['Data'].dt.strftime('%d/%m/%Y')
 
     truncate(tblStage)
-    truncate(tblHistorico)
+    #truncate(tblHistorico)
 
     for i in df.index:
         sql = "INSERT INTO public."+tblStage+"(data_venda, cod_venda, cod_produto, cod_vendedor, nome_vendedor, categoria_produto, marca_produto, modelo_produto, valor_produto, custo_produto, lucro_venda, cod_cliente, nome_cliente, idade_cliente, uf_venda, sexo_cliente)"
