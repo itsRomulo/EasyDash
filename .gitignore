@@ -103,8 +103,10 @@ celerybeat.pid
 
 # Environments
 .env
+.venv
 env/
 ENV/
+venv/
 env.bak/
 venv.bak/
 
@@ -127,4 +129,6 @@ dmypy.json
 .pyre/
 DadosFabio.py
 p11Discador.py
+parameters.json
+.00Entrada/parameters.json
 00Entrada/parameters.json
