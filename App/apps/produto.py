@@ -79,7 +79,7 @@ fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
                            locations="district", featureidkey="properties.district",
                            center={"lat": 45.5517, "lon": -73.7073},
                            mapbox_style="carto-positron", zoom=9)
-
+fig4 = pedidoGraf.montaGraficoProdutosRegiao()
 
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()

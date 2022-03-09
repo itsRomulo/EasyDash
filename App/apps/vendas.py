@@ -57,7 +57,6 @@ def map_graph():
             state_id_map[feature['properties']['sigla']] = feature['id']
 
         brazil = pd.read_csv('brazil.csv')
-        print(brazil)    
 
         fig = px.choropleth(
         brazil, #soybean database
@@ -168,6 +167,7 @@ fig2=vendasGraf.montaGraficoVxM()
 fig3=vendasGraf.montaGraficoVxS()
 fig4=vendasGraf.montaGraficoVxD()
 fig5=vendasGraf.montaGraficoVxC()
+fig6=vendasGraf.montaGraficoVxR()
 
 linha1_grafico = dbc.CardGroup(
     [
