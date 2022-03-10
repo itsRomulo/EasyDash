@@ -75,10 +75,10 @@ fig3 = pedidoGraf.montaGraficoVendasMarca()
 
 #fig = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
 
-fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
-                           locations="district", featureidkey="properties.district",
-                           center={"lat": 45.5517, "lon": -73.7073},
-                           mapbox_style="carto-positron", zoom=9)
+# fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
+#                            locations="district", featureidkey="properties.district",
+#                            center={"lat": 45.5517, "lon": -73.7073},
+#                            mapbox_style="carto-positron", zoom=9)
 fig4 = pedidoGraf.montaGraficoProdutosRegiao()
 
 linha  = dbc.Row(dbc.Card())
@@ -146,20 +146,7 @@ linha1_grafico = dbc.CardGroup(
                 ]
             )
         ),
-        dbc.Card(
-            dbc.CardBody(
-                [   html.H5("Top 10 produtos", className="card-title"),
-                     dcc.Graph(
-                    id='example-graph4',
-                    figure=fig2
-                    ),
-                    dbc.Button(
-                        "Exportar", className="mt-auto"
-                    
-                    ),
-                ]
-            )
-        )
+        
         
     ]
 )
@@ -183,16 +170,30 @@ linha2_grafico = dbc.CardGroup(
                 ]
             )
         ),
+        # dbc.Card(
+        #     dbc.CardBody(
+        #         [
+        #             html.H5("Produtos por Região", className="card-title"),
+        #             dcc.Graph(
+        #             id='example-graph5',
+        #             figure=fig4
+        #         ),
+        #             dbc.Button(
+        #                 "Click here", className="mt-auto"
+        #             ),
+        #         ]
+        #     )
+        # )
         dbc.Card(
             dbc.CardBody(
-                [
-                    html.H5("Produtos por Região", className="card-title"),
-                    dcc.Graph(
-                    id='example-graph5',
-                    figure=fig4
-                ),
+                [   html.H5("Top 10 produtos", className="card-title"),
+                     dcc.Graph(
+                    id='example-graph4',
+                    figure=fig2
+                    ),
                     dbc.Button(
-                        "Click here", className="mt-auto"
+                        "Exportar", className="mt-auto"
+                    
                     ),
                 ]
             )
