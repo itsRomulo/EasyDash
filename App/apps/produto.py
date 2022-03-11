@@ -135,7 +135,7 @@ linha1_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Vendas por categoria", className="card-title"),
+                    html.H5("Vendas x Categoria", className="card-title"),
                      dcc.Graph(
                     id='example-graph6',
                     figure=fig
@@ -159,7 +159,7 @@ linha2_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Vendas por marca", className="card-title"),
+                    html.H5("Vendas x Marca", className="card-title"),
                     dcc.Graph(
                     id='example-graph3',
                     figure=fig3

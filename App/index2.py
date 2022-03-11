@@ -14,7 +14,7 @@ from app import app
 from app import server
 
 # Connect to your app pages
-from apps import vendas, produto, home, notfound, regiao
+from apps import vendas, produto, home, notfound, regiao, regiao_prod
 
 import montaGraficoVendas
 import montaGraficoPedidos
@@ -177,6 +177,8 @@ def display_page(pathname):
         return produto.layout
     if pathname == '/apps/regiao':
         return regiao.layout
+    if pathname == '/apps/regiao_prod':
+        return regiao_prod.layout
     if pathname == '/':
         return home.layout
     else:

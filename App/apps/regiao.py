@@ -23,16 +23,10 @@ import montaGraficoVendas as vendasGraf
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 EASYDASH = "https://romulobrandao.com/EasyDash.png"
 
-
-df4 = px.data.election()
-
 df6 = px.data.tips()
 fig6 = px.histogram(df6, x="total_bill")
 
 geojson = px.data.election_geojson()
-
-
-fig4 = pedidoGraf.montaGraficoProdutosRegiao()
 
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()
@@ -51,7 +45,7 @@ linha1_grafico = dbc.CardGroup(
                     figure=fig6
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
+                        "Produtos por Região", size="lg", className="me-1", href='/apps/regiao_prod'
                     ),
                 ]
             )
@@ -62,29 +56,5 @@ linha1_grafico = dbc.CardGroup(
 )
 
 
-
-linha2_grafico = dbc.CardGroup(
-    [
-        
-         dbc.Card(
-            dbc.CardBody(
-                 [
-                    html.H5("Produtos por Região", className="card-title"),
-                     dcc.Graph(
-                     id='example-graph5',
-                     figure=fig4
-                ),
-                     dbc.Button(
-                         "Click here", className="mt-auto"
-                     ),
-                ]
-            )
-        ),
-        
-        
-    ]
-)
-
-
-layout =html.Div([linha1_grafico, linha2_grafico]) 
+layout =html.Div([linha1_grafico]) 
 
