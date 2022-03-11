@@ -9,6 +9,9 @@ from dash.dependencies import Input, Output
 
 from dash_bootstrap_components._components.Navbar import Navbar
 
+# Autenticacao
+import dash_auth
+
 # Connect to main app.py file
 from app import app
 from app import server
@@ -19,7 +22,21 @@ from apps import vendas, produto, home, notfound, regiao, regiao_prod
 import montaGraficoVendas
 import montaGraficoPedidos
 
+import sys
+sys.path.insert(1, 'C:/EasyDash')
+import pFuncoes as fun
+
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+dados = fun.json_reader('C:\\EasyDash\\App\\auth.json')
+dados_auth=dados['result']
+montaAuth={}
+cont = 0
+
+for dado in dados_auth:
+    montaAuth.update({dado['user']:dado['password']})
+
+autenticacao = dash_auth.BasicAuth(app,montaAuth)
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
