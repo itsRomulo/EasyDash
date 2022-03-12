@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
-
+import pandas as pd
 from turtle import color, right
 import dash_core_components as dcc
 
@@ -119,6 +119,33 @@ navbar = dbc.Navbar(dbc.Container(
      dark=True
     
 )
+def preencheDropDownANO():
+    sqlAno = 'SELECT distinct(substring(data_venda, 7, 4)) FROM public.historico_2jr order by substring(data_venda, 7, 4) ASC;'
+    ano = fun.consulta_bd(sqlAno)
+    df_ano = pd.DataFrame(ano, columns=['Ano'])
+    return df_ano
+
+def preencheDropDownMES():
+    sqlMes = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr order by substring(data_venda, 4, 2) ASC;'
+    mes = fun.consulta_bd(sqlMes)
+    df_mes = pd.DataFrame(mes, columns=['Mes'])
+    
+    return df_mes, 
+
+def preencheDropDownDIA():
+    
+    sqlDia = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr order by substring(data_venda, 1, 2) ASC;'
+    dia = fun.consulta_bd(sqlDia)
+    df_dia = pd.DataFrame(dia, columns=['Dia'])
+    return df_dia
+
+ano = preencheDropDownANO()   
+mes = preencheDropDownMES() 
+dia = preencheDropDownDIA()
+
+
+
+
 
 sidebar = html.Div(
     [
@@ -132,8 +159,8 @@ sidebar = html.Div(
                 dbc.DropdownMenu(
                  children=[   
                 dcc.Checklist(
-                    options=['2022', '2021', '2020', '2019'],
-                    value=[],
+                    ano['Ano'],
+                    ano['Ano'].values,
             ),
                 ],
                     label="Ano",
@@ -148,8 +175,8 @@ sidebar = html.Div(
                 dbc.DropdownMenu(
                  children=[   
                 dcc.Checklist(
-                    options=['Janeiro', 'Fevereiro', 'Março', 'Abril'],
-                    value=[],
+                   mes['Mes'],
+                   mes['Mes'].values,
                 ),
                 ],
                     label="Mês",
@@ -162,8 +189,8 @@ sidebar = html.Div(
                 dbc.DropdownMenu(
                  children=[   
                 dcc.Checklist(
-                    options=['1', '2', '3', '4', '5', '6'],
-                    value=[],
+                    dia['Dia'],
+                    dia['Dia'].values,
                 ),
                 ],
                     label="Dia",

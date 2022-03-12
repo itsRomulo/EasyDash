@@ -7,8 +7,8 @@
         "host":"localhost",
         "database":"EasyDash",
         "user":"postgres",
-        "password":"postgres",
-        "port":"5432",
+        "password":"17571946735",
+        "port":"5433",
         "tblStage":"stg_2jr",
         "tblHistorico":"historico_2jr"
     }

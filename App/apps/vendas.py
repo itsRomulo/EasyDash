@@ -19,61 +19,6 @@ import sys
 sys.path.insert(1, 'C:/EasyDash/App'),
 import montaGraficoVendas as vendasGraf
 
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
-df2 = px.data.tips()
-df3 = px.data.gapminder().query("country=='Canada'")
-
-df4 = px.data.election()
-geojson = px.data.election_geojson()
-
-
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-fig2 = px.pie(df2, values='tip', names='day')
-fig3 = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
-#fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
- #                          locations="district", featureidkey="properties.district",
-  #                         center={"lat": 45.5517, "lon": -73.7073},
-   #                        mapbox_style="carto-positron", zoom=9)
-
-df5 = px.data.stocks(indexed=True)-1
-fig5 = px.area(df5, facet_col="company", facet_col_wrap=2)
-
-df6 = px.data.tips()
-fig6 = px.histogram(df6, x="total_bill")
-
-fig7 = px.choropleth(locations=["CA", "TX", "NY"], locationmode="USA-states", color=[1,2,3], scope="usa")
-
-def map_graph():
-    with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson') as response:
-        Brazil = json.load(response) # Javascrip object notation 
-
-        state_id_map = {}
-        for feature in Brazil ['features']:
-            feature['id'] = feature['properties']['name']
-            state_id_map[feature['properties']['sigla']] = feature['id']
-
-        brazil = pd.read_csv('brazil.csv')
-
-        fig = px.choropleth(
-        brazil, #soybean database
-        locations = "Estado", #define the limits on the map/geography
-        geojson = Brazil, #shape information
-        color = "Vendas", #defining the color of the scale through the database
-        hover_name = "Estado", #the information in the box
-        hover_data =["Vendas","Longitude","Latitude"],
-        #title of the map
-        #animation_frame = "ano" #creating the application based on the year
-        )
-        fig.update_geos(fitbounds = "locations", visible = False)
-        return fig
-
-fig6 = map_graph()
-
-
 
 
 
@@ -177,7 +122,7 @@ linha1_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Ano", className="card-title"),
                      dcc.Graph(
-                    id='example-graph6',
+                    id='VxA',
                     figure=fig
                 ),
                     dbc.Button(
@@ -192,7 +137,7 @@ linha1_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Mês", className="card-title"),
                      dcc.Graph(
-                    id='example-graph7',
+                    id='VxM',
                     figure=fig2
                 ),
                     dbc.Button(
@@ -206,7 +151,7 @@ linha1_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Semana", className="card-title"),
                     dcc.Graph(
-                    id='example-graph3',
+                    id='VxS',
                     figure=fig3
                 ),
                     dbc.Button(
@@ -229,7 +174,7 @@ linha2_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Dia", className="card-title"),
                      dcc.Graph(
-                    id='example-graph8',
+                    id='VxD',
                     figure=fig4
                     ),
                     dbc.Button(
@@ -244,7 +189,7 @@ linha2_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Canal", className="card-title"),
                      dcc.Graph(
-                    id='example-graph4',
+                    id='VxC',
                     figure=fig5
                     ),
                     dbc.Button(
@@ -258,7 +203,7 @@ linha2_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Região", className="card-title"),
                     dcc.Graph(
-                    id='example-graph5',
+                    id='VxR',
                     figure=fig6
                 ),
                     dbc.Button(
@@ -279,7 +224,7 @@ linha3_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Vendedor", className="card-title"),
                      dcc.Graph(
-                    id='example-graph9',
+                    id='VxV',
                     figure=fig
                     ),
                     dbc.Button(
