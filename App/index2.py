@@ -11,6 +11,7 @@ from dash_bootstrap_components._components.Navbar import Navbar
 
 # Autenticacao
 import dash_auth
+from Dados import consulta_bd
 
 # Connect to main app.py file
 from app import app
@@ -119,32 +120,31 @@ navbar = dbc.Navbar(dbc.Container(
      dark=True
     
 )
-def preencheDropDownANO():
-    sqlAno = 'SELECT distinct(substring(data_venda, 7, 4)) FROM public.historico_2jr order by substring(data_venda, 7, 4) ASC;'
+
+def preencheDropDownANO(sqlAno):
     ano = fun.consulta_bd(sqlAno)
     df_ano = pd.DataFrame(ano, columns=['Ano'])
     return df_ano
 
-def preencheDropDownMES():
-    sqlMes = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr order by substring(data_venda, 4, 2) ASC;'
+
+def preencheDropDownMES(sqlMes):
     mes = fun.consulta_bd(sqlMes)
     df_mes = pd.DataFrame(mes, columns=['Mes'])
     
-    return df_mes, 
+    return df_mes 
 
-def preencheDropDownDIA():
-    
-    sqlDia = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr order by substring(data_venda, 1, 2) ASC;'
+
+def preencheDropDownDIA(sqlDia):
     dia = fun.consulta_bd(sqlDia)
     df_dia = pd.DataFrame(dia, columns=['Dia'])
     return df_dia
 
-ano = preencheDropDownANO()   
-mes = preencheDropDownMES() 
-dia = preencheDropDownDIA()
-
-
-
+sqlAno = 'SELECT distinct(substring(data_venda, 7, 4)) FROM public.historico_2jr order by substring(data_venda, 7, 4) ASC;'
+sqlMes = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr order by substring(data_venda, 4, 2) ASC;'
+sqlDia = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr order by substring(data_venda, 1, 2) ASC;'
+ano = preencheDropDownANO(sqlAno)   
+mes = preencheDropDownMES(sqlMes) 
+dia = preencheDropDownDIA(sqlDia)
 
 
 sidebar = html.Div(
@@ -159,11 +159,12 @@ sidebar = html.Div(
                 dbc.DropdownMenu(
                  children=[   
                 dcc.Checklist(
+                    
                     ano['Ano'],
-                    ano['Ano'].values,
-            ),
+                    ano['Ano'].values, id = "DropDownAno",
+            ), 
                 ],
-                    label="Ano",
+                    label="Ano", 
                 ),
 
             ]),
@@ -172,13 +173,8 @@ sidebar = html.Div(
 
             dbc.Nav([  
                 
-                dbc.DropdownMenu(
-                 children=[   
-                dcc.Checklist(
-                   mes['Mes'],
-                   mes['Mes'].values,
-                ),
-                ],
+                dbc.DropdownMenu( id = "DropDownMes",
+                 children=[],
                     label="Mês",
                 ),
             ]),
@@ -190,10 +186,10 @@ sidebar = html.Div(
                  children=[   
                 dcc.Checklist(
                     dia['Dia'],
-                    dia['Dia'].values,
+                    dia['Dia'].values, 
                 ),
                 ],
-                    label="Dia",
+                    label="Dia", id = "DropDownDia"
                 ),
                 # dbc.NavLink("Home", href="/", active="exact"),
                 # dbc.NavLink("Page 1", href="/page-1", active="exact"),
@@ -211,7 +207,9 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content])
 
 
-@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+@app.callback(
+    Output("page-content", "children"), 
+    Input("url", "pathname") )
 
 def display_page(pathname):
     
@@ -227,6 +225,102 @@ def display_page(pathname):
         return home.layout
     else:
         return notfound.layout
+
+
+
+@app.callback(
+    Output(component_id='DropDownMes', component_property='children'), 
+    Input(component_id='DropDownAno' , component_property='value')
+    )
+
+def changedAno(value):
+    
+    nAno = (len(value))
+    montaSql = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr'
+    if (nAno > 0):
+        montaSql += ' where '
+    else: 
+        montaSql = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr'    
+    for i in range(0, nAno):
+        if (i != nAno-1): 
+            montaSql +=  "substring(data_venda, 7, 4) = '"+value[i]+"' or "
+        else:
+            montaSql += "substring(data_venda, 7, 4) = '"+value[i]+"' order by substring(data_venda, 4, 2)  ASC"
+    mes = preencheDropDownMES(montaSql) 
+    mesesdisponiveis = dcc.Checklist(
+
+                                
+                   mes['Mes'],
+                   mes['Mes'].values, id = 'DropDownMesCarregado'
+              
+                ),
+    return mesesdisponiveis
+
+
+
+
+@app.callback(
+    Output(component_id='DropDownDia', component_property='children'),  
+    [Input(component_id='DropDownMesCarregado', component_property='value'),
+    Input(component_id='DropDownAno', component_property='value')],
+    )
+
+def changedMes(dMes, dAno):
+    nMes = len(dMes)
+    nAno = len(dAno)
+    montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'
+    if (nAno > 0):
+        montaSql += ' where '
+    else: 
+        montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
+    for i in range(0, nAno):
+        if (i != nAno-1): 
+            montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+        else:
+            montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"'"
+    
+    if (nMes > 0):
+        if(nAno == 0):
+            diasdisponiveis = ''
+            return diasdisponiveis 
+        else:
+            montaSql += ' and '
+            for m in range(0, nMes):
+                if (m != nMes-1): 
+                    montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                else:
+                    montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' order by (substring(data_venda, 1, 2)) asc"
+    dia = preencheDropDownDIA(montaSql) 
+    print(dia)
+    diasdisponiveis = dcc.Checklist(
+
+                                
+                   dia['dia'],
+                   dia['dia'].values, id = 'DropDownDiaCarregado'
+              
+                ),
+    return diasdisponiveis
+    # nMes = (len(value))
+    # montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'
+    # if (nMes > 0):
+    #     montaSql += ' where '
+    # else: 
+    #     montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
+    # for i in range(0, nMes):
+    #     if (i != nMes-1): 
+    #         montaSql +=  "substring(data_venda, 4, 2) = '"+value[i]+"' or "
+    #     else:
+    #         montaSql += "substring(data_venda, 4, 2) = '"+value[i]+"' order by substring(data_venda, 1, 2)  ASC"
+    # print(montaSql)
+    # dia = preencheDropDownMES(montaSql) 
+    # diasdisponiveis = dcc.Checklist(
+
+                                
+    #                dia['Dia'],
+    #                dia['Dia'].values, id = 'DropdownDiaCarregado'
+              
+    #         ),
+    # return diasdisponiveis
 
 # def render_page_content(pathname):
 #     if pathname == "/":
