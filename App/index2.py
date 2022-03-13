@@ -291,12 +291,11 @@ def changedMes(dMes, dAno):
                 else:
                     montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' order by (substring(data_venda, 1, 2)) asc"
     dia = preencheDropDownDIA(montaSql) 
-    print(dia)
     diasdisponiveis = dcc.Checklist(
 
                                 
-                   dia['dia'],
-                   dia['dia'].values, id = 'DropDownDiaCarregado'
+                   dia['Dia'],
+                   dia['Dia'].values, id = 'DropDownDiaCarregado'
               
                 ),
     return diasdisponiveis
