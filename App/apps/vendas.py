@@ -107,8 +107,9 @@ Primeiras_Informacoes = dbc.CardGroup(
     ]
 )
 
-fig= vendasGraf.montaGraficoVxA()
-fig2=vendasGraf.montaGraficoVxM()
+
+fig= vendasGraf.montaGraficoVxA('select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC')
+fig2=vendasGraf.montaGraficoVxM('select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC')
 fig3=vendasGraf.montaGraficoVxS()
 fig4=vendasGraf.montaGraficoVxD()
 fig5=vendasGraf.montaGraficoVxC()

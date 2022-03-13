@@ -34,16 +34,14 @@ def montaIndicadores():
   
   return df_vT['Valor Total'][0], df_sL['Valor Total'][0],df_mM['Valor Total'][0],df_cP['Valor Total'][0],df_mP['Valor Total'][0]
 
-def montaGraficoVxA():
-  sql = 'select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC'
+def montaGraficoVxA(sql):
   VxA = fun.consulta_bd(sql)
   df_vA = pd.DataFrame(VxA, columns=['Valor','Ano'])
   fig = px.bar(df_vA, x="Ano", y="Valor")
   
   return fig
 
-def montaGraficoVxM():
-  sql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC'
+def montaGraficoVxM(sql):
   VxM = fun.consulta_bd(sql)
   df_vM = pd.DataFrame(VxM, columns=['Valor','Mês'])
   fig = px.histogram(df_vM, x="Mês", y="Valor")

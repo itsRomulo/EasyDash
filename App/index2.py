@@ -11,6 +11,7 @@ from dash_bootstrap_components._components.Navbar import Navbar
 
 # Autenticacao
 import dash_auth
+
 from Dados import consulta_bd
 
 # Connect to main app.py file
@@ -20,7 +21,7 @@ from app import server
 # Connect to your app pages
 from apps import vendas, produto, home, notfound, regiao, regiao_prod
 
-import montaGraficoVendas
+import montaGraficoVendas as vGV
 import montaGraficoPedidos
 
 import sys
@@ -299,27 +300,81 @@ def changedMes(dMes, dAno):
               
                 ),
     return diasdisponiveis
-    # nMes = (len(value))
-    # montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'
-    # if (nMes > 0):
-    #     montaSql += ' where '
-    # else: 
-    #     montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
-    # for i in range(0, nMes):
-    #     if (i != nMes-1): 
-    #         montaSql +=  "substring(data_venda, 4, 2) = '"+value[i]+"' or "
-    #     else:
-    #         montaSql += "substring(data_venda, 4, 2) = '"+value[i]+"' order by substring(data_venda, 1, 2)  ASC"
-    # print(montaSql)
-    # dia = preencheDropDownMES(montaSql) 
-    # diasdisponiveis = dcc.Checklist(
 
-                                
-    #                dia['Dia'],
-    #                dia['Dia'].values, id = 'DropdownDiaCarregado'
-              
-    #         ),
-    # return diasdisponiveis
+
+
+
+@app.callback(
+    Output(component_id='VxA', component_property='figure'),
+    Output(component_id='VxM', component_property='figure'),  
+    Input(component_id='DropDownAno', component_property='value'),
+    Input(component_id='DropDownMesCarregado', component_property='value'),
+    Input(component_id='DropDownDiaCarregado', component_property='value'),
+    
+    )
+def input_output(dAno, dMes, dDia):
+    def updateVxA(dAno, dMes, dDia):
+        print(dAno)
+        print(dMes)
+        print(dDia)
+        nMes = len(dMes)
+        nAno = len(dAno)
+        montaSql = "select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr"
+        #where substring(data_venda, 7, 4) = '2021' GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC"
+        if (nAno > 0):
+            montaSql += ' where '
+        else: 
+            montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
+        for i in range(0, nAno):
+            if (i != nAno-1): 
+                montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+            else:
+                montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"' GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC"
+    
+        
+        fig = vGV.montaGraficoVxA(montaSql)
+        return fig
+
+    def updateVxM(dAno, dMes, dDia):
+        print(dAno)
+        print(dMes)
+        print(dDia)
+        nMes = len(dMes)
+        nAno = len(dAno)
+        montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
+        if (nAno > 0):
+            montaSql += ' where '
+        else: 
+            montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
+        for i in range(0, nAno):
+            if (i != nAno-1): 
+                montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+            else:
+                montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"'"
+
+        if (nMes > 0):
+            if(nAno == 0):
+                diasdisponiveis = ''
+                return diasdisponiveis 
+            else:
+                montaSql += ' and '
+                for m in range(0, nMes):
+                    if (m != nMes-1): 
+                        montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                    else:
+                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC"  
+
+        print(montaSql)
+        fig = vGV.montaGraficoVxM(montaSql)
+        return fig                      
+
+    VxA = updateVxA(dAno, dMes, dDia)
+    VxM = updateVxM(dAno, dMes, dDia) 
+     
+    return VxA, VxM 
+     
+     #GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC'
+
 
 # def render_page_content(pathname):
 #     if pathname == "/":
