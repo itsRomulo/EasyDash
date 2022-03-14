@@ -110,10 +110,21 @@ Primeiras_Informacoes = dbc.CardGroup(
 
 fig= vendasGraf.montaGraficoVxA('select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC')
 fig2=vendasGraf.montaGraficoVxM('select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC')
-fig3=vendasGraf.montaGraficoVxS()
-fig4=vendasGraf.montaGraficoVxD()
-fig5=vendasGraf.montaGraficoVxC()
-fig6=vendasGraf.montaGraficoVxR()
+
+sql_sem1 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '01' and '07' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
+sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '08' and '15' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
+sql_sem3 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '16' and '22' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
+sql_sem4 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '23' and '31' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
+  
+fig3=vendasGraf.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4)
+
+
+fig4=vendasGraf.montaGraficoVxD("select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '2021' and substring(data_venda, 4, 2) = '03' group by data_venda")
+
+sql_internet = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1'"
+sql_lojafisica = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1'"
+fig5=vendasGraf.montaGraficoVxC(sql_internet, sql_lojafisica)
+
 
 linha1_grafico = dbc.CardGroup(
     [
