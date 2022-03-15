@@ -12,12 +12,8 @@ import locale
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-def montaIndicadores():
-  sql_vendaTotal = 'SELECT sum(cast(valor_produto as float)) FROM historico_2jr;'
-  sql_somaLucro = 'SELECT sum(cast(lucro_venda as float)) FROM historico_2jr;'
-  sql_mediaMargem = 'select cast(avg((cast(lucro_venda as float) * 100)/(cast(custo_produto as float))) as numeric(15,2)) from historico_2jr'
-  sql_contaPedidos = 'select count(distinct(cod_venda)) from historico_2jr'
-  sql_medioPedidos = 'select cast((sum(cast(valor_produto as float)))/(count(distinct(cod_venda))) as numeric (10,2)) from historico_2jr'
+def montaIndicadores(sql_vendaTotal, sql_somaLucro, sql_mediaMargem, sql_contaPedidos, sql_medioPedidos):
+  
 #conecta_bd()
   vendaTotal = fun.consulta_bd(sql_vendaTotal)
   somaLucro = fun.consulta_bd(sql_somaLucro)

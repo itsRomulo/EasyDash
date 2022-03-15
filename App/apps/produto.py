@@ -33,59 +33,22 @@ df3 = px.data.gapminder().query("country=='Canada'")
 df4 = px.data.election()
 geojson = px.data.election_geojson()
 
-# fig = go.Figure()
+sql_vendCat = 'SELECT count(categoria_produto), categoria_produto FROM historico_2jr GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC'
+sql_top10 = 'SELECT count(modelo_produto), modelo_produto, marca_produto FROM historico_2jr GROUP BY modelo_produto, marca_produto HAVING COUNT(modelo_produto) > 1 ORDER BY count(modelo_produto) DESC'
+sql_vendMarca = 'SELECT count(marca_produto), marca_produto FROM historico_2jr GROUP BY marca_produto HAVING COUNT(marca_produto) > 1 ORDER BY count(marca_produto) DESC'
 
-# fig.add_trace(go.Bar(
-#     x=["Camisas", "Camisetas", "Bermudas", "Tênis"],
-#     y=[3, 2, 1, 4]
-# ))
-
-# fig.update_layout(
-#     #autosize=False,
-#     # width=500,
-#     # height=500,
-#     yaxis=dict(
-#         #title_text="Y-axis Title",
-#         #ticktext=["Very long label", "long label", "3", "label"],
-#         tickvals=[1, 2, 3, 4],
-#         tickmode="array",
-#         #titlefont=dict(size=30),
-#     )
-# )
-# fig.update_yaxes(automargin=True)
-
-# fig.show()
-#fig = px.bar(df, x="Produto", y="Quantidade", color="Cidade", barmode="group")
-fig  = pedidoGraf.montaGraficoVendasCategoria()
-fig2 = pedidoGraf.montaGraficoTop10()
-fig3 = pedidoGraf.montaGraficoVendasMarca()
-
-# fig2 = go.Figure(go.Bar(
-#             x=[20, 14, 23, 30, 6, 27, 18, 9, 20, 13],
-#             y=['Camisas', 'Bermudas', 'Tênis', 'Camisetas', 'Cueca', 'Chinelo', 'Boné', 'Perfume', 'Relógio', 'Mochila'],
-#             orientation='h'))
-#fig2 = px.pie(df2, values='tip', names='day')
-
-# labels = ['Nike','Adidas','Lacoste','Outros']
-# values = [4500, 4000, 1053, 500]
-
-# fig3 = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='label+percent',
-#                              insidetextorientation='radial'
-#                             )])
-
-#fig = px.line(df3, x="year", y="lifeExp", title='Life expectancy in Canada')
-
-# fig4 = px.choropleth_mapbox(df4, geojson=geojson, color="Bergeron",
-#                            locations="district", featureidkey="properties.district",
-#                            center={"lat": 45.5517, "lon": -73.7073},
-#                            mapbox_style="carto-positron", zoom=9)
-fig4 = pedidoGraf.montaGraficoProdutosRegiao()
+fig  = pedidoGraf.montaGraficoVendasCategoria(sql_vendCat)
+fig2 = pedidoGraf.montaGraficoTop10(sql_top10)
+fig3 = pedidoGraf.montaGraficoVendasMarca(sql_vendMarca)
 
 linha  = dbc.Row(dbc.Card())
 pulalinha = html.Br()
 
+sql_contaProdutos = 'select count(cod_venda) from historico_2jr'
+sql_principalCategoria = 'SELECT count(categoria_produto), categoria_produto FROM historico_2jr GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC'
+sql_principalMarca = 'SELECT count(marca_produto), marca_produto FROM historico_2jr GROUP BY marca_produto HAVING COUNT(marca_produto) > 1 ORDER BY count(marca_produto) DESC'
 
-cP, pC, pM = pedidoGraf.montaIndicadores()
+cP, pC, pM = pedidoGraf.montaIndicadores(sql_contaProdutos, sql_principalCategoria, sql_principalMarca)
 cP = str(cP)
 
 Primeiras_Informacoes = dbc.CardGroup(
@@ -93,7 +56,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3( cP, className="card-title"),
+                    html.H3( children=[cP], className="card-title", id = "IndicadorProdutoVendido"),
                     html.P(
                         "Quantidade de Produtos Vendidos",
                         
@@ -106,7 +69,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(pC, className="card-title"),
+                    html.H3(children=[pC], className="card-title", id = "IndicadorCategoriaVendida"),
                     html.P(
                         "Principal Categoria Vendida",
                         
@@ -117,7 +80,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(pM, className="card-title"),
+                    html.H3(children=[pM], className="card-title", id = "IndicadorMarcaVendida"),
                     html.P(
                         "Principal Marca Vendida",
                         
@@ -135,9 +98,9 @@ linha1_grafico = dbc.CardGroup(
             
             dbc.CardBody(
                 [
-                    html.H5("Vendas x Categoria", className="card-title"),
+                    html.H5("Vendas x Categoria (Qtd)", className="card-title"),
                      dcc.Graph(
-                    id='example-graph6',
+                    id='VxCat',
                     figure=fig
                 ),
                     dbc.Button(
@@ -161,7 +124,7 @@ linha2_grafico = dbc.CardGroup(
                 [
                     html.H5("Vendas x Marca", className="card-title"),
                     dcc.Graph(
-                    id='example-graph3',
+                    id='VxMarca',
                     figure=fig3
                 ),
                     dbc.Button(
@@ -188,7 +151,7 @@ linha2_grafico = dbc.CardGroup(
             dbc.CardBody(
                 [   html.H5("Top 10 produtos", className="card-title"),
                      dcc.Graph(
-                    id='example-graph4',
+                    id='Top10',
                     figure=fig2
                     ),
                     dbc.Button(

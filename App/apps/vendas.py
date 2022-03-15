@@ -27,9 +27,13 @@ pulalinha = html.Br()
 
 
 
+sql_vendaTotal = 'SELECT sum(cast(valor_produto as float)) FROM historico_2jr;'
+sql_somaLucro = 'SELECT sum(cast(lucro_venda as float)) FROM historico_2jr;'
+sql_mediaMargem = 'select cast(avg((cast(lucro_venda as float) * 100)/(cast(custo_produto as float))) as numeric(15,2)) from historico_2jr'
+sql_contaPedidos = 'select count(distinct(cod_venda)) from historico_2jr'
+sql_medioPedidos = 'select cast((sum(cast(valor_produto as float)))/(count(distinct(cod_venda))) as numeric (10,2)) from historico_2jr'
 
-
-vT,sL,mM,cP,mP = vendasGraf.montaIndicadores()
+vT,sL,mM,cP,mP = vendasGraf.montaIndicadores(sql_vendaTotal, sql_somaLucro, sql_mediaMargem, sql_contaPedidos, sql_medioPedidos)
 vT = int(vT)
 vT = '{0:,}'.format(vT).replace(',','.')
 vT = 'R$ '+vT+',00'
@@ -50,7 +54,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(''+vT+'', className="card-title"),
+                    html.H3(children=[''+vT+''], className="card-title", id = 'IndicadorValorTotalVendas'),
                     html.P(
                         "Valor Total de Vendas",
                         
@@ -63,7 +67,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(''+sL+'', className="card-title"),
+                    html.H3(children=[''+sL+''], className="card-title", id = 'IndicadorLucroTotal'),
                     html.P(
                         "Lucro Total",
                         
@@ -74,7 +78,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(''+mM+'', className="card-title"),
+                    html.H3(children=[''+mM+''], className="card-title", id = 'IndicadorMargemLucro'),
                     html.P(
                         "Margem de Lucro",
                         
@@ -85,7 +89,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(''+cP+'', className="card-title"),
+                    html.H3(children=[''+cP+''], className="card-title", id = 'IndicadorQuantidadePedidos'),
                     html.P(
                         "Quantidade de Pedidos",
                         
@@ -96,7 +100,7 @@ Primeiras_Informacoes = dbc.CardGroup(
         dbc.Card(
             dbc.CardBody(
                 [
-                    html.H3(''+mP+'', className="card-title"),
+                    html.H3(children=[''+mP+''], className="card-title", id = 'IndicadorValorMedio'),
                     html.P(
                         "Valor Médio de Pedidos",
                         
