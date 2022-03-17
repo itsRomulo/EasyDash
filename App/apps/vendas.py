@@ -133,9 +133,9 @@ fig5=vendasGraf.montaGraficoVxC(sql_internet, sql_lojafisica)
 linha1_grafico = dbc.CardGroup(
     [
         dbc.Card(
-            
+            children=[
             dbc.CardBody(
-                [
+                [ 
                     html.H5("Vendas x Ano (R$)", className="card-title"),
                      dcc.Graph(
                     id='VxA',
@@ -145,10 +145,16 @@ linha1_grafico = dbc.CardGroup(
                         "Exportar", className="mt-auto"
                     ),
                 ]
-            )
-        ),
+            ) 
+            ], id = "CardVxA"
+        ),       
+    ]
+)
+
+linha2_grafico = dbc.CardGroup(
+    [
         dbc.Card(
-            
+            children=[
             dbc.CardBody(
                 [
                     html.H5("Vendas x Mês (R$)", className="card-title"),
@@ -161,8 +167,17 @@ linha1_grafico = dbc.CardGroup(
                     ),
                 ]
             )
+            ], id='CardVxM',
         ),
+        
+        
+    ]
+)
+
+linha3_grafico = dbc.CardGroup(
+    [ 
         dbc.Card(
+            children=[
             dbc.CardBody(
                 [
                     html.H5("Vendas x Semana (R$)", className="card-title"),
@@ -174,15 +189,16 @@ linha1_grafico = dbc.CardGroup(
                         "Exportar", className="mt-auto"
                     ),
                 ]
-            )
+            ) ], id='CardVxS',
         )
+        
         
     ]
 )
 
 
 
-linha2_grafico = dbc.CardGroup(
+linha4_grafico = dbc.CardGroup(
     [
         dbc.Card(
             
@@ -206,7 +222,7 @@ linha2_grafico = dbc.CardGroup(
 
 
 
-linha3_grafico = dbc.CardGroup(
+linha5_grafico = dbc.CardGroup(
     [
         dbc.Card(
             
@@ -228,22 +244,11 @@ linha3_grafico = dbc.CardGroup(
     ]
 )
 
-linha5_grafico = dbc.CardGroup(
+linha6_grafico = dbc.CardGroup(
     [
         dbc.Card(
             
-            dbc.CardBody(
-                [
-                    html.H5("Vendas x Vendedor", className="card-title"),
-                     dcc.Graph(
-                    id='VxV',
-                    figure=fig
-                    ),
-                    dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
-                ]
-            )
+            
         ),
         
         
@@ -253,5 +258,5 @@ linha5_grafico = dbc.CardGroup(
 
 
 
-layout =html.Div([Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico]) 
+layout =html.Div([Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico, linha4_grafico, linha5_grafico]) 
 

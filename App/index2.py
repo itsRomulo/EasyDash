@@ -314,7 +314,7 @@ def changedMes(dMes, dAno):
     Input(component_id='DropDownDiaCarregado', component_property='value'),
     
     )
-def input_output(dAno, dMes, dDia):
+def input_output_vendas(dAno, dMes, dDia):
     def updateVxA(dAno, dMes, dDia):
         
         nMes = len(dMes)
@@ -538,9 +538,6 @@ def updateIndicadoresVendas(dAno, dMes, dDia):
         mP = 'R$ ' +mP
 
         return  vT,sL,mM,cP,mP
-
-
-
 
 
 
@@ -810,5 +807,53 @@ def output_mapa_regiao_prod(dAno, dMes, dDia):
     return PxR
 
 
+
+
+@app.callback(
+    Output(component_id='CardVxA', component_property='children'),
+    
+    Input(component_id='DropDownAno', component_property='value'),
+    
+)
+def TelaVxA(dAno):
+    
+    def cardVxA(dAno):
+        
+        nAno = len(dAno)
+        if nAno == 1:
+            
+            return ''
+            
+        else: 
+            cardVxA = dbc.CardBody(
+                [ 
+                    html.H5("Vendas x Ano (R$)", className="card-title"),
+                     dcc.Graph(
+                    id='VxA',
+                    figure=''
+                ),
+                    dbc.Button(
+                        "Exportar", className="mt-auto"
+                    ),
+                ]
+            ) 
+            
+            return cardVxA
+    
+    
+
+    cardVxA = cardVxA(dAno)
+   
+
+    return cardVxA
+
+
+
+
+
 if __name__ == "__main__":
     app.run_server(port=8888)
+
+
+
+ 
