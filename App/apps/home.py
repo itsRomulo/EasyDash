@@ -1,3 +1,4 @@
+from pydoc import classname
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -23,7 +24,8 @@ cardVendas = dbc.Card(
                 ),
                 dbc.Button("Acessar", 
                 href="/apps/vendas",
-                color="success"),
+                color="info",
+                className="btn btn-primary btn-lg"),
             ]
         ),
     ],
@@ -43,7 +45,8 @@ cardProd = dbc.Card(
                 ),
                 dbc.Button("Acessar", 
                 href="/apps/produto",
-                color="success"),
+                color="info",
+                className="btn btn-primary btn-lg"),
             ]
         ),
     ],
@@ -63,7 +66,8 @@ cardRegiao = dbc.Card(
                 ),
                 dbc.Button("Acessar", 
                 href="/apps/regiao",
-                color="success"),
+                color="info",
+                className="btn btn-primary btn-lg"),
             ]
         ),
     ],
@@ -80,11 +84,11 @@ cards = dbc.Row(
 
 layout = html.Div([
     
-    html.H1('Seja bem-vindo ao ', style={"color": "black", "display": "inline"}),
+    html.H1('Seja bem-vindo ao ', style={"color": "black", "display": "inline", "fontSize": 50}),
     html.H1('Easy', style={"color": "gray", "display": "inline"}), 
     html.H1('Dash', style={"color": "green", "display": "inline"}),
     html.H1('!', style={"color": "black", "display": "inline"}),
-    html.H5('O Dashboard feito sob medida para auxiliar você e sua equipe a tomarem as melhores decisões!'),
+    #html.H5('O Dashboard feito sob medida para auxiliar você e sua equipe a tomarem as melhores decisões!'),
     cards
 ], style={"textAlign": "center"})
 

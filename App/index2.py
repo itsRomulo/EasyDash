@@ -28,7 +28,7 @@ import sys
 sys.path.insert(1, 'C:/EasyDash')
 import pFuncoes as fun
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(external_stylesheets=[dbc.themes.CERULEAN])
 
 dados = fun.json_reader('C:\\EasyDash\\App\\auth.json')
 dados_auth=dados['result']
@@ -43,7 +43,7 @@ autenticacao = dash_auth.BasicAuth(app,montaAuth)
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     "position": "fixed",
-    "top": 50,
+    "top": 100,
     "left": 10,
     "bottom": 0,
     "width": "16rem",
@@ -59,29 +59,30 @@ CONTENT_STYLE = {
     "padding": "2rem 1rem",
 }
 
+
 nav_link1 = {
-    "color": "white",
+    
     "textAlign": "right",
-    "fontSize": 15,
+    "fontSize": 20,
     "marginLeft": "600",
-    "backgroundColor": "black",
+    
 }
 
-nav_link2 = {
-    "color": "white",
-    "textAlign": "right",
-    "fontSize": 15,
-    "marginRight": "50",
-    "backgroundColor": "black",
-}
+# nav_link2 = {
+#     "color": "white",
+#     "textAlign": "right",
+#     "fontSize": 15,
+#     "marginRight": "50",
+#     "backgroundColor": "black",
+# }
 
 nav_name = {
-    "color": "white",
+    
     "textAlign": "left",
-    "fontSize": 18,
+    "fontSize": 20,
     "margin": "auto",
-    "fontFamily": "cursive",
-    #"backgroundColor": "red",
+    "fontFamily": "Arial, Helvetica, sans-serif",
+    
 }
 
 nav_item_00 = dbc.NavLink('Home', href='/')
@@ -112,12 +113,13 @@ navbar = dbc.Navbar(dbc.Container(
                                              
                                              className="ms-auto",
                                              navbar=True,
+                                             style=nav_link1
                                             ),
          
             
          ]
      ),
-     color="primary",
+     color="dark",
      dark=True
     
 )
