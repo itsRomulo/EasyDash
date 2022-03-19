@@ -237,25 +237,25 @@ sidebar = html.Div(
                 ),
             ]),
 
-            html.Br(),
+        #     html.Br(),
 
-            dbc.Nav([
-                dbc.DropdownMenu(
-                 children=[   
-                dcc.Checklist(
-                    dia['Dia'],
-                    dia['Dia'].values, 
-                ),
-                ],
-                    label="Dia", id = "DropDownDia"
-                ),
-                # dbc.NavLink("Home", href="/", active="exact"),
-                # dbc.NavLink("Page 1", href="/page-1", active="exact"),
-                # dbc.NavLink("Page 2", href="/page-2", active="exact"),
-            ],
-            vertical=True,
-            pills=True,
-        ),
+        #     dbc.Nav([
+        #         dbc.DropdownMenu(
+        #          children=[   
+        #         dcc.Checklist(
+        #             dia['Dia'],
+        #             dia['Dia'].values, 
+        #         ),
+        #         ],
+        #             label="Dia", id = "DropDownDia"
+        #         ),
+        #         # dbc.NavLink("Home", href="/", active="exact"),
+        #         # dbc.NavLink("Page 1", href="/page-1", active="exact"),
+        #         # dbc.NavLink("Page 2", href="/page-2", active="exact"),
+        #     ],
+        #     vertical=True,
+        #     pills=True,
+        # ),
     ],
     style=SIDEBAR_STYLE,
 )

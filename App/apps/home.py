@@ -29,7 +29,7 @@ cardVendas = dbc.Card(
             ]
         ),
     ],
-    style={"width": "22rem", "height": "500px"},
+    style={"width": "22rem", "height": "500px", "textAlign": "center"},
 )
 
 cardProd = dbc.Card(
@@ -50,7 +50,7 @@ cardProd = dbc.Card(
             ]
         ),
     ],
-    style={"width": "22rem", "height": "500px"},
+    style={"width": "22rem", "height": "500px", "textAlign": "center"},
 )
 
 cardRegiao = dbc.Card(
@@ -71,7 +71,7 @@ cardRegiao = dbc.Card(
             ]
         ),
     ],
-    style={"width": "22rem", "height": "500px"},
+    style={"width": "22rem", "height": "500px", "textAlign": "center"},
 )
 
 cards = dbc.Row(
@@ -84,13 +84,13 @@ cards = dbc.Row(
 
 layout = html.Div([
     
-    html.H1('Seja bem-vindo ao ', style={"color": "black", "display": "inline", "fontSize": 50}),
-    html.H1('Easy', style={"color": "gray", "display": "inline"}), 
-    html.H1('Dash', style={"color": "green", "display": "inline"}),
-    html.H1('!', style={"color": "black", "display": "inline"}),
+    # html.H1('Seja bem-vindo ao ', style={"color": "black", "display": "inline", "fontSize": 35, "marginLeft": "500px"}),
+    # html.H1('Easy', style={"color": "gray", "display": "inline"}), 
+    # html.H1('Dash', style={"color": "green", "display": "inline"}),
+    # html.H1('!', style={"color": "black", "display": "inline"}),
     #html.H5('O Dashboard feito sob medida para auxiliar você e sua equipe a tomarem as melhores decisões!'),
     cards
-], style={"textAlign": "center"})
+], style={})
 
 
 

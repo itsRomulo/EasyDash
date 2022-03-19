@@ -7,7 +7,7 @@ from app import app
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components._components.Navbar import Navbar
 import plotly.graph_objs as go
-
+import pFuncoes as fun
 import dash
 import dash_table
 from dash.html import I
@@ -57,5 +57,100 @@ linha1_grafico = dbc.CardGroup(
 )
 
 
-layout =html.Div([linha1_grafico]) 
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 100,
+    "left": 10,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#ffffff",
+}
+
+
+
+def preencheDropDownANO(sqlAno):
+    ano = fun.consulta_bd(sqlAno)
+    df_ano = pd.DataFrame(ano, columns=['Ano'])
+    return df_ano
+
+
+def preencheDropDownMES(sqlMes):
+    mes = fun.consulta_bd(sqlMes)
+    df_mes = pd.DataFrame(mes, columns=['Mes'])
+    
+    return df_mes 
+
+
+def preencheDropDownDIA(sqlDia):
+    dia = fun.consulta_bd(sqlDia)
+    df_dia = pd.DataFrame(dia, columns=['Dia'])
+    return df_dia
+
+
+
+sqlAno = 'SELECT distinct(substring(data_venda, 7, 4)) FROM public.historico_2jr order by substring(data_venda, 7, 4) ASC;'
+sqlMes = 'SELECT distinct(substring(data_venda, 4, 2)) FROM public.historico_2jr order by substring(data_venda, 4, 2) ASC;'
+sqlDia = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr order by substring(data_venda, 1, 2) ASC;'
+ano = preencheDropDownANO(sqlAno)   
+mes = preencheDropDownMES(sqlMes) 
+dia = preencheDropDownDIA(sqlDia)
+
+
+sidebar = html.Div(
+    [
+        html.H2(dbc.Col(html.Img(src='/assets/EasyDash.png', height="20px"))),
+        html.Hr(),
+        html.P(
+            "Selecione o Período desejado", className="lead"
+        ),
+        dbc.Nav(
+            [
+                dbc.DropdownMenu(
+                 children=[   
+                dcc.Checklist(
+                    
+                    ano['Ano'],
+                    ano['Ano'].values, id = "DropDownAno",
+            ), 
+                ],
+                    label="Ano", 
+                ),
+
+            ]),
+
+            html.Br(),
+
+            dbc.Nav([  
+                
+                dbc.DropdownMenu( id = "DropDownMes",
+                 children=[],
+                    label="Mês",
+                ),
+            ]),
+
+        #     html.Br(),
+
+        #     dbc.Nav([
+        #         dbc.DropdownMenu(
+        #          children=[   
+        #         dcc.Checklist(
+        #             dia['Dia'],
+        #             dia['Dia'].values, 
+        #         ),
+        #         ],
+        #             label="Dia", id = "DropDownDia"
+        #         ),
+        #         # dbc.NavLink("Home", href="/", active="exact"),
+        #         # dbc.NavLink("Page 1", href="/page-1", active="exact"),
+        #         # dbc.NavLink("Page 2", href="/page-2", active="exact"),
+        #     ],
+        #     vertical=True,
+        #     pills=True,
+        # ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+layout =html.Div([sidebar, linha1_grafico]) 
 
