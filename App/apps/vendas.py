@@ -7,10 +7,10 @@ import pathlib
 from app import app
 import dash_bootstrap_components as dbc
 from dash_bootstrap_components._components.Navbar import Navbar
-import pandas as pd
+import pandas as pd 
 import plotly.express as px
 import plotly.graph_objs as go
- 
+import index
 
 import json
 from urllib.request import urlopen
@@ -258,5 +258,5 @@ linha6_grafico = dbc.CardGroup(
 
 
 
-layout =html.Div([Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico, linha4_grafico, linha5_grafico]) 
+layout =html.Div([index.sidebar, Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico, linha4_grafico, linha5_grafico]) 
 
