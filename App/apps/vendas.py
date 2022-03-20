@@ -258,5 +258,6 @@ linha6_grafico = dbc.CardGroup(
 
 
 
+app.title = 'EasyDash - Vendas'
 layout =html.Div([index.sidebar, Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico, linha4_grafico, linha5_grafico]) 
 

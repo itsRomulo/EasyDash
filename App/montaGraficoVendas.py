@@ -136,4 +136,8 @@ def montaGraficoVxR(sql):
         #animation_frame = "ano" #creating the application based on the year
         )
         fig.update_geos(fitbounds = "locations", visible = False)
+        fig.update_layout(
+        autosize=True,
+        width=1500,
+        height=800)
     return fig

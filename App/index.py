@@ -1,3 +1,4 @@
+from datetime import datetime
 import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
@@ -28,8 +29,9 @@ import sys
 sys.path.insert(1, 'C:/EasyDash')
 import pFuncoes as fun
 
-app = dash.Dash(external_stylesheets=[dbc.themes.CERULEAN])
 
+app = dash.Dash(external_stylesheets=[dbc.themes.CERULEAN])
+app.title = 'Dashboard - EasyDash' 
 dados = fun.json_reader('C:\\EasyDash\\App\\auth.json')
 dados_auth=dados['result']
 montaAuth={}
@@ -367,32 +369,42 @@ def input_output_vendas(dAno, dMes):
         return fig                      
 
     def updateVxD(dAno, dMes):
+        
         nMes = len(dMes)
         nAno = len(dAno)
-        montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'
-        if (nAno > 0):
-            montaSql += ' where '
-        else: 
-            montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'    
-        for i in range(0, nAno):
-            if (i != nAno-1): 
-                montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
-            else:
-                montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"'"
+        atual = datetime.now()
+        mes = atual.strftime('%m')
+        ano = atual.strftime('%Y')
+        print (mes)
+        print (ano)
+        if nMes > 1:
+            montaSql = "select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '"+str(ano)+"' and substring(data_venda, 4, 2) = '"+str(mes)+"' group by data_venda"
 
-        if (nMes > 0):
-            if(nAno == 0):
-                diasdisponiveis = ''
-                return diasdisponiveis 
-            else:
-                montaSql += ' and '
-                for m in range(0, nMes):
-                    if (m != nMes-1): 
-                        montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
-                    else:
-                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' GROUP BY data_venda  ORDER BY data_venda ASC"  
+        else:    
+            montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'
+            if (nAno > 0):
+                montaSql += ' where '
+            else: 
+                montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'    
+            for i in range(0, nAno):
+                if (i != nAno-1): 
+                    montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+                else:
+                    montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"'"
 
-        
+            if (nMes > 0):
+                if(nAno == 0):
+                    diasdisponiveis = ''
+                    return diasdisponiveis 
+                else:
+                    montaSql += ' and '
+                    for m in range(0, nMes):
+                        if (m != nMes-1): 
+                            montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                        else:
+                            montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' GROUP BY data_venda  ORDER BY data_venda ASC"  
+
+            
         fig = vGV.montaGraficoVxD(montaSql)
         return fig 
 
