@@ -159,5 +159,6 @@ sidebar = html.Div(
 
 
 
+
 layout =html.Div([sidebar, linha2_grafico]) 
 
