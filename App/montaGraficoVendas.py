@@ -40,7 +40,7 @@ def montaGraficoVxA(sql):
 def montaGraficoVxM(sql):
   VxM = fun.consulta_bd(sql)
   df_vM = pd.DataFrame(VxM, columns=['Valor','Mês'])
-  fig = px.histogram(df_vM, x="Mês", y="Valor")
+  fig = df_vM.plot.area(x="Mês", y="Valor")
   
   return fig
 

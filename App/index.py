@@ -577,9 +577,24 @@ def input_output_produtos(dAno, dMes):
             if (i != nAno-1): 
                 montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
             else:
-                montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"') GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC"
-    
-        
+                montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"')" 
+                #GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC"
+
+        if (nMes > 0):
+            if(nAno == 0):
+                diasdisponiveis = ''
+                return diasdisponiveis 
+            else:
+                montaSql += ' and ('
+                for m in range(0, nMes):
+                    if (m != nMes-1): 
+                        montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                    else:
+                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"') GROUP BY categoria_produto HAVING COUNT(categoria_produto) > 1 ORDER BY count(categoria_produto) DESC"    
+
+
+
+        print(montaSql)
         fig = vGP.montaGraficoVendasCategoria(montaSql)
         return fig
 
@@ -610,7 +625,6 @@ def input_output_produtos(dAno, dMes):
                     else:
                         montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"') GROUP BY marca_produto HAVING COUNT(marca_produto) > 1 ORDER BY count(marca_produto) DESC"  
 
-        print(montaSql)
         print("----")
         fig = vGP.montaGraficoVendasMarca(montaSql)
         return fig                      
