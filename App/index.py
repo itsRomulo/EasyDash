@@ -34,15 +34,10 @@ import pFuncoes as fun
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN], suppress_callback_exceptions=True)
 app.title = 'Dashboard - EasyDash' 
-dados = fun.json_reader('C:\\EasyDash\\App\\auth.json')
-dados_auth=dados['result']
-montaAuth={}
-cont = 0
 
-for dado in dados_auth:
-    montaAuth.update({dado['user']:dado['password']})
+logado = []
 
-autenticacao = dash_auth.BasicAuth(app,montaAuth)
+
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
@@ -72,13 +67,6 @@ nav_link1 = {
     
 }
 
-# nav_link2 = {
-#     "color": "white",
-#     "textAlign": "right",
-#     "fontSize": 15,
-#     "marginRight": "50",
-#     "backgroundColor": "black",
-# }
 
 nav_name = {
     
@@ -93,6 +81,10 @@ nav_item_00 = dbc.NavLink('Home', href='/')
 nav_item_01 = dbc.NavLink('Vendas', href='/apps/vendas') 
 nav_item_02 = dbc.NavLink('Produtos', href='/apps/produto')
 nav_item_03 = dbc.NavLink('Região', href='/apps/regiao')
+espaco = html.Div(style={"margin-left": "50px"})
+
+nav_item_04 = dbc.NavLink(children='', href='#', id='login')
+nav_item_05 = dbc.NavLink(children='', href='/logout', id='botaoSair' )
 
 navbar = dbc.Navbar(dbc.Container(
          [
@@ -112,7 +104,7 @@ navbar = dbc.Navbar(dbc.Container(
                  style={"textDecoration": "none"},
              ),
              dbc.Nav([
-                                               nav_item_00,nav_item_01,nav_item_02, nav_item_03
+                                               nav_item_00,nav_item_01,nav_item_02, nav_item_03, espaco, nav_item_04, nav_item_05
                                              ],
                                              
                                              className="ms-auto",
@@ -213,49 +205,61 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 #app.layout = html.Div([dcc.Location(id="url"), navbar, sidebar, content])
 app.layout = html.Div([dcc.Location(id="url"), navbar, content])
+    
 
 @app.callback(
     Output("page-content", "children"), 
     Input("url", "pathname") )
 
 def display_page(pathname):
-    
-    if pathname == '/login':
+    global logado
+    if len(logado) == 0:
+        app.layout = html.Div([dcc.Location(id="url"), content])
         return login.layout
-    if pathname == '/apps/vendas':
-        return vendas.layout
-    if pathname == '/apps/produto':
-        return produto.layout
-    if pathname == '/apps/regiao':
-        return regiao.layout
-    if pathname == '/apps/regiao_prod':
-        return regiao_prod.layout
-    if pathname == '/':
-        return home.layout
-    else:
-        return notfound.layout
+    else:    
+        if pathname == '/login':
+            return login.layout
+        app.layout = html.Div([dcc.Location(id="url"), navbar, content])    
+        if pathname == '/apps/vendas':
+            return vendas.layout
+        if pathname == '/apps/produto':
+            return produto.layout
+        if pathname == '/apps/regiao':
+            return regiao.layout
+        if pathname == '/apps/regiao_prod':
+            return regiao_prod.layout
+        if pathname == '/':
+            return home.layout
+        if pathname == '/logout':
+            app.layout = html.Div([dcc.Location(id="url"), content])
+            logado = ''
+            return login.layout    
+        else:
+            return notfound.layout
 
 @app.callback(
     Output("url", "pathname"),
     Output('output1', 'children'),
     Output("user", "value"),
     Output('password', 'value'),
+    Output('login', 'children'),
+    Output('botaoSair', 'children'),
     Input('verify', 'n_clicks'),
     State('user', 'value'),
     State('password', 'value')
     )
 def update_login(n_clicks, user, password):
     if n_clicks > 0:
-        print(user)
-        print(password)
+        
         sql="select usuario, senha from users where usuario ='{0}' and senha = '{1}'".format(user, password)
         result = fun.consulta_bd(sql)
         if len(result) == 0:
-            print(result)
-            return '/login','Usuário ou senha incorretos!','',''
+            
+            return '/login','Usuário ou senha incorretos!','','','',''
         else:
-            print(result)
-            return '/','','',''
+            global logado
+            logado = result[0]
+            return '/','','','',logado[0],"Sair"
 
 @app.callback(
     Output(component_id='DropDownMes', component_property='children'), 
