@@ -371,11 +371,12 @@ def input_output_vendas(dAno, dMes):
         
         nMes = len(dMes)
         nAno = len(dAno)
-        montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
+        montaSql='select sum(cast(valor_produto as float)) as valor, substring(data_venda, 4, 2) as mes, substring(data_venda, 7, 4) as ano from historico_2jr'
+        #montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
         if (nAno > 0):
             montaSql += ' where ('
         else: 
-            montaSql = 'SELECT distinct(substring(data_venda, 1, 2)) FROM public.historico_2jr'    
+            montaSql = 'select sum(cast(valor_produto as float)) as valor, substring(data_venda, 4, 2) as mes, substring(data_venda, 7, 4) as ano from historico_2jr'    
         for i in range(0, nAno):
             if (i != nAno-1): 
                 montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
@@ -392,9 +393,9 @@ def input_output_vendas(dAno, dMes):
                     if (m != nMes-1): 
                         montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
                     else:
-                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"') GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC"  
+                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"  
 
-        
+        montaSql += ' GROUP BY substring(data_venda, 4, 2), substring(data_venda, 7, 4) ORDER BY substring(data_venda, 4, 2) ASC, substring(data_venda, 7, 4) ASC'
         fig = vGV.montaGraficoVxM(montaSql)
         return fig                      
 

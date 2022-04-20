@@ -109,6 +109,8 @@ ENV/
 venv/
 env.bak/
 venv.bak/
+venv
+
 
 # Spyder project settings
 .spyderproject
@@ -132,3 +134,4 @@ p11Discador.py
 parameters.json
 .00Entrada/parameters.json
 00Entrada/parameters.json
+00Entrada/

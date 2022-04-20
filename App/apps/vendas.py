@@ -113,7 +113,7 @@ Primeiras_Informacoes = dbc.CardGroup(
 
 
 fig= vendasGraf.montaGraficoVxA('select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC')
-fig2=vendasGraf.montaGraficoVxM('select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr GROUP BY substring(data_venda, 4, 2)  ORDER BY substring(data_venda, 4, 2) ASC')
+fig2=vendasGraf.montaGraficoVxM('select sum(cast(valor_produto as float)) as valor, substring(data_venda, 4, 2) as mes, substring(data_venda, 7, 4) as ano from historico_2jr GROUP BY substring(data_venda, 4, 2), substring(data_venda, 7, 4) ORDER BY substring(data_venda, 4, 2) ASC, substring(data_venda, 7, 4) ASC')
 
 sql_sem1 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '01' and '07' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
 sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '08' and '15' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
@@ -259,5 +259,5 @@ linha6_grafico = dbc.CardGroup(
 
 
 
-layout =html.Div([index.sidebar, Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha3_grafico, linha4_grafico, linha5_grafico]) 
+layout =html.Div([index.sidebar, Primeiras_Informacoes, linha1_grafico, linha2_grafico, linha4_grafico, linha5_grafico]) 
 

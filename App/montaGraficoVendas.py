@@ -37,11 +37,20 @@ def montaGraficoVxA(sql):
   
   return fig
 
+# def montaGraficoVxM(sql):
+#   VxM = fun.consulta_bd(sql)
+#   df_vM = pd.DataFrame(VxM, columns=['Valor','Mês'])
+#   fig = px.histogram(df_vM, x="Mês", y="Valor")
+  
+#   return fig
+
 def montaGraficoVxM(sql):
   VxM = fun.consulta_bd(sql)
-  df_vM = pd.DataFrame(VxM, columns=['Valor','Mês'])
-  fig = px.histogram(df_vM, x="Mês", y="Valor")
-  
+  df_vM = pd.DataFrame(VxM, columns=['Valor em R$','Mês','Ano'])
+  fig = px.line(df_vM, x="Mês", y="Valor em R$", color="Ano", markers=True)
+  fig.update_traces(textposition="bottom right")
+  #fig = px.area(df_vM, x="Mes", y="Valor", color="Ano", line_group="Ano", markers=True, fill='tozeroy')
+  # fig.show()
   return fig
 
 def montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4):
@@ -83,10 +92,17 @@ def montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4):
 
   return fig
 
+# def montaGraficoVxD(sql):
+#   diasMes = fun.consulta_bd(sql)
+#   df_dM = pd.DataFrame(diasMes, columns=['Data','Valor Vendido'])
+#   fig = px.bar(df_dM, x='Data', y='Valor Vendido')
+#   return fig
+
 def montaGraficoVxD(sql):
   diasMes = fun.consulta_bd(sql)
   df_dM = pd.DataFrame(diasMes, columns=['Data','Valor Vendido'])
-  fig = px.bar(df_dM, x='Data', y='Valor Vendido')
+  fig = px.area(df_dM, x="Data", y="Valor Vendido", markers=True)
+  #fig.show()
   return fig
 
 def montaGraficoVxC(sql_internet, sql_lojafisica):
