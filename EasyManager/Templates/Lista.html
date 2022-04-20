@@ -1,0 +1,50 @@
+{% extends "template.html" %}
+{% block conteudo %}
+
+  <style>
+    .load { width:60px;
+            height:60px;
+            border:rgba(0,0,0,0.18) solid;
+            border-left-color:#ff0000;
+            border-radius:50%;
+            animation: loading 1.2s infinite;
+            visibility:hidden;
+           }
+    @keyframes loading {
+      to {
+        transform:rotate(360deg);
+      }
+    }
+  </style>
+  <div id="load"></div>
+  <a class="btn btn-outline-info" href="{{ url_for('novo') }}">Cadastrar Novo Usuário</a>
+  
+
+  <br/>
+  <br/>
+  <br/>
+  <table class="table table-striped table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>Identificador do Usuário</th>
+        <th>Usuário</th>
+        <th>Nivel de Acesso</th>
+        <th width="500"> Operações </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in range(0, tamanho) %}
+        <tr>
+          <td>{{ idUsuario[i] }}</td>
+          <td>{{ usuario[i] }}</td>
+          <td>{{ permissao[i] }}</td>
+          <td align="center">
+            <a href="{{ url_for('senha', id=idUsuario[i]) }}" class="btn btn-outline-info btn-sm"> Alterar Senha</a>
+            <a href="{{ url_for('editar', id=idUsuario[i]) }}" class="btn btn-outline-info btn-sm"> Editar Permissão</a>
+            <a href="{{ url_for('deletar', id=idUsuario[i]) }}" class="btn btn-outline-danger btn-sm"> Excluir</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

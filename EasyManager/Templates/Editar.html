@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block conteudo %}
+    <form action="{{ url_for('editar', id=idUsuario[0]) }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="nome">Id Usuario</label>
+                <input type="text" id="id_usuario" name="id_usuario" class="form-control" value="{{ idUsuario[0] }}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="porta">Usuario</label>
+                <input type="text" id="usuario" name="usuario" class="form-control" value="{{ usuario[0] }}">
+            </div>
+
+            <div class="form-group">
+                <label for="habilitado">Nível de Acesso</label>
+                <select id="permissao" name="permissao" class="form-control">
+                    <option value="0">Selecione um valor</option>
+                    <option value="1">Vendas</option>
+                    <option value="2">Produtos</option>
+                    <option value="3">Gestão</option>
+                </select>
+            </div>
+            </br>
+            <input type="submit" class="btn btn-info" value="Realizar Alteração"/>
+            <a class="btn btn-info" href="{{ url_for('index') }}">Voltar</a>
+            <link rel="stylesheet" href="../static/css/bootstrap.css">
+        </fieldset>
+    </form>
+{% endblock %}

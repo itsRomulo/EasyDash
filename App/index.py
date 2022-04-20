@@ -22,7 +22,7 @@ from app import app
 from app import server
 
 # Connect to your app pages
-from apps import vendas, produto, home, notfound, regiao, regiao_prod, login
+from apps import vendas, produto, home, notfound, regiao, regiao_prod, login, notPermission
 
 import montaGraficoVendas as vGV
 import montaGraficoPedidos as vGP
@@ -36,7 +36,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN], suppress_c
 app.title = 'Dashboard - EasyDash' 
 
 logado = []
-
+permissao = ''
 
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -212,54 +212,101 @@ app.layout = html.Div([dcc.Location(id="url"), navbar, content])
     Input("url", "pathname") )
 
 def display_page(pathname):
-    global logado
+    global logado, permissao
     if len(logado) == 0:
         app.layout = html.Div([dcc.Location(id="url"), content])
         return login.layout
-    else:    
-        if pathname == '/login':
-            return login.layout
-        app.layout = html.Div([dcc.Location(id="url"), navbar, content])    
-        if pathname == '/apps/vendas':
-            return vendas.layout
-        if pathname == '/apps/produto':
-            return produto.layout
-        if pathname == '/apps/regiao':
-            return regiao.layout
-        if pathname == '/apps/regiao_prod':
-            return regiao_prod.layout
-        if pathname == '/':
-            return home.layout
-        if pathname == '/logout':
-            app.layout = html.Div([dcc.Location(id="url"), content])
-            logado = ''
-            return login.layout    
-        else:
-            return notfound.layout
+    else:
+        
+        if permissao == '3':     
+            if pathname == '/login':
+                return login.layout
+            app.layout = html.Div([dcc.Location(id="url"), navbar, content])    
+            if pathname == '/apps/vendas':
+                return vendas.layout
+            if pathname == '/apps/produto':
+                return produto.layout
+            if pathname == '/apps/regiao':
+                return regiao.layout
+            if pathname == '/apps/regiao_prod':
+                return regiao_prod.layout
+            if pathname == '/':
+                return home.layout
+            if pathname == '/logout':
+                app.layout = html.Div([dcc.Location(id="url"), content])
+                logado = ''
+                return login.layout    
+            else:
+                return notfound.layout
+        
+        elif permissao == '1':
+            if pathname == '/login':
+                return login.layout
+            app.layout = html.Div([dcc.Location(id="url"), navbar, content])    
+            if pathname == '/apps/vendas':
+                return vendas.layout
+            if pathname == '/apps/produto':
+                return notPermission.layout
+            if pathname == '/apps/regiao':
+                return notPermission.layout
+            if pathname == '/apps/regiao_prod':
+                return notPermission.layout
+            if pathname == '/':
+                return home.layout
+            if pathname == '/logout':
+                app.layout = html.Div([dcc.Location(id="url"), content])
+                logado = ''
+                return login.layout    
+            else:
+                return notfound.layout        
+
+        elif permissao == '2':
+            if pathname == '/login':
+                return login.layout
+            app.layout = html.Div([dcc.Location(id="url"), navbar, content])    
+            if pathname == '/apps/vendas':
+                return notPermission.layout
+            if pathname == '/apps/produto':
+                return produto.layout
+            if pathname == '/apps/regiao':
+                return notPermission.layout
+            if pathname == '/apps/regiao_prod':
+                return notPermission.layout
+            if pathname == '/':
+                return home.layout
+            if pathname == '/logout':
+                app.layout = html.Div([dcc.Location(id="url"), content])
+                logado = ''
+                return login.layout    
+            else:
+                return notfound.layout
+
 
 @app.callback(
     Output("url", "pathname"),
     Output('output1', 'children'),
     Output("user", "value"),
     Output('password', 'value'),
-    Output('login', 'children'),
-    Output('botaoSair', 'children'),
+    
     Input('verify', 'n_clicks'),
     State('user', 'value'),
     State('password', 'value')
     )
 def update_login(n_clicks, user, password):
     if n_clicks > 0:
-        
-        sql="select usuario, senha from users where usuario ='{0}' and senha = '{1}'".format(user, password)
+        print(user)
+        print(password)
+        sql="select usuario, senha, nivel_acesso from users where usuario ='{0}' and senha = '{1}'".format(user, password)
         result = fun.consulta_bd(sql)
         if len(result) == 0:
             
-            return '/login','Usuário ou senha incorretos!','','','',''
+            return '/login','Usuário ou senha incorretos!','',''
         else:
-            global logado
+            global logado, permissao
             logado = result[0]
-            return '/','','','',logado[0],"Sair"
+            permissao = logado[2]
+            print(permissao)
+            return '/','','',''
 
 @app.callback(
     Output(component_id='DropDownMes', component_property='children'), 
