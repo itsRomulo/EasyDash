@@ -338,10 +338,12 @@ def changedAno(value):
 
 
 @app.callback(
-    Output(component_id='VxA', component_property='figure'),
-    Output(component_id='VxM', component_property='figure'),
-    Output(component_id='VxD', component_property='figure'),
-    Output(component_id='VxC', component_property='figure'),     
+    Output(component_id='graph1', component_property='figure'),
+    Output(component_id='graph2', component_property='figure'),
+    Output(component_id='graph3', component_property='figure'),
+    Output(component_id='titGraph1', component_property='children'),
+    Output(component_id='titGraph2', component_property='children'),
+    Output(component_id='titGraph3', component_property='children'),  
     Input(component_id='DropDownAno', component_property='value'),
     Input(component_id='DropDownMesCarregado', component_property='value'),
     
@@ -398,6 +400,22 @@ def input_output_vendas(dAno, dMes):
         montaSql += ' GROUP BY substring(data_venda, 4, 2), substring(data_venda, 7, 4) ORDER BY substring(data_venda, 4, 2) ASC, substring(data_venda, 7, 4) ASC'
         fig = vGV.montaGraficoVxM(montaSql)
         return fig                      
+
+    def updateVxS(dAno, dMes):
+            
+            nMes = len(dMes)
+            nAno = len(dAno)
+            if nAno == 1 and nMes == 1:
+                sql_sem1 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '01' and '07' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+                sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '08' and '15' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+                sql_sem3 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '16' and '22' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+                sql_sem4 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '23' and '31' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+                fig = vGV.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4)
+                print('monteiiiiiii')
+            else:
+                fig = ''
+            
+            return fig
 
     def updateVxD(dAno, dMes):
         
@@ -478,13 +496,29 @@ def input_output_vendas(dAno, dMes):
         return fig 
 
     VxA = updateVxA(dAno, dMes)
-    VxM = updateVxM(dAno, dMes) 
+    VxM = updateVxM(dAno, dMes)
+    VxS = updateVxS(dAno, dMes)
     VxD = updateVxD(dAno, dMes) 
     VxC = updateVxC(dAno, dMes)
-    #VxR = updateVxR(dAno, dMes, dDia)  
     
-    return VxA, VxM, VxD, VxC
-     
+    nAno = len(dAno)
+    nMes = len(dMes) 
+    print(nAno)
+    print(nMes)
+    if nAno == 1:
+        
+        if nMes == 1:
+            
+            return VxS, VxD, VxC, "Vendas x Semana (R$)", "Vendas x Dia (R$)", "Vendas x Canal (R$)"
+        else:
+            return VxM, VxD, VxC, "Vendas x Mês (R$)", "Vendas x Dia (R$)", "Vendas x Canal (R$)"    
+    elif nMes == 1:
+        
+        return VxA, VxM, VxC, "Vendas x Ano (R$)", "Vendas x Mês (R$)", "Vendas x Canal (R$)"
+    else:
+        
+        return VxA, VxM, VxC, "Vendas x Ano (R$)", "Vendas x Mês (R$)", "Vendas x Canal (R$)"
+
 
 @app.callback(
 
@@ -857,43 +891,43 @@ def output_mapa_regiao_prod(dAno, dMes):
 
 
 
-@app.callback(
-    Output(component_id='CardVxA', component_property='children'),
+# @app.callback(
+#     Output(component_id='CardVxA', component_property='children'),
     
-    Input(component_id='DropDownAno', component_property='value'),
+#     Input(component_id='DropDownAno', component_property='value'),
     
-)
-def TelaVxA(dAno):
+# )
+# def TelaVxA(dAno):
     
-    def cardVxA(dAno):
+#     def cardVxA(dAno):
         
-        nAno = len(dAno)
-        if nAno == 1:
+#         nAno = len(dAno)
+#         if nAno == 1:
             
-            return ''
+#             return ''
             
-        else: 
-            cardVxA = dbc.CardBody(
-                [ 
-                    html.H5("Vendas x Ano (R$)", className="card-title"),
-                     dcc.Graph(
-                    id='VxA',
-                    figure=''
-                ),
-                    dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
-                ]
-            ) 
+#         else: 
+#             cardVxA = dbc.CardBody(
+#                 [ 
+#                     html.H5("Vendas x Ano (R$)", className="card-title"),
+#                      dcc.Graph(
+#                     id='VxA',
+#                     figure=''
+#                 ),
+#                     dbc.Button(
+#                         "Exportar", className="mt-auto"
+#                     ),
+#                 ]
+#             ) 
             
-            return cardVxA
+#             return cardVxA
     
     
 
-    cardVxA = cardVxA(dAno)
+#     cardVxA = cardVxA(dAno)
    
 
-    return cardVxA
+#     return cardVxA
 
 
 
