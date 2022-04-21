@@ -14,7 +14,7 @@ with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/m
         state_id_map[feature['properties']['sigla']] = feature['id']
 
     brazil = pd.read_csv('brazil.csv')
-    print(brazil)    
+     
 
     fig = px.choropleth(
     brazil, #soybean database

@@ -44,9 +44,9 @@ def login():
         senha = request.form['senha']
         SQL_AUTENTICAR = "SELECT usuario, senha, nivel_acesso from users where usuario = '{0}' and senha = '{1}'".format(usuario, senha)
         select = f.consulta_bd(SQL_AUTENTICAR)
-        print(select)
+        
         if select != []:
-            print('loguei')
+            
             usu = autenticaUsuario(select)
             session['usuario'] = usu
             return redirect(url_for('index'))

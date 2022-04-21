@@ -85,8 +85,7 @@ def montaGraficoProdutosRegiao(sql):
     df_vR['Latitude']=df_vR['Latitude'].astype(float, errors = 'raise')
     # df_vR['Ano']=df_vR['Ano'].astype(int, errors = 'raise')
 
-    print(df_vR)
-    print(df_vR.dtypes)
+    
 
     with urlopen('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson') as response:
         Brazil = json.load(response) # Javascrip object notation

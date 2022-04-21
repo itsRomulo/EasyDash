@@ -14,6 +14,11 @@ from dash.html import I
 from dash.html.Img import Img
 from dash.html.Title import Title
 from dash.dependencies import Input, Output, State
+from plotly.io import write_image
+from dash_extensions import Download
+from dash_extensions.snippets import send_bytes
+
+
 
 import sys
 sys.path.insert(1, 'C:/EasyDash/App'),
@@ -104,8 +109,8 @@ linha1_grafico = dbc.CardGroup(
                     figure=fig
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
+                        "Exportar", className="mt-auto", id='DownVxCat', n_clicks=0,
+                    ), Download(id='downloadVxCat'),
                 ]
             )
         ),
@@ -128,25 +133,12 @@ linha2_grafico = dbc.CardGroup(
                     figure=fig3
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
+                        "Exportar", className="mt-auto", id='DownVxMarca', n_clicks=0
+                    ), Download(id='downloadVxMarca'),
                 ]
             )
         ),
-        # dbc.Card(
-        #     dbc.CardBody(
-        #         [
-        #             html.H5("Produtos por Região", className="card-title"),
-        #             dcc.Graph(
-        #             id='example-graph5',
-        #             figure=fig4
-        #         ),
-        #             dbc.Button(
-        #                 "Click here", className="mt-auto"
-        #             ),
-        #         ]
-        #     )
-        # )
+      
         dbc.Card(
             dbc.CardBody(
                 [   html.H5("Top 10 produtos", className="card-title"),
@@ -155,9 +147,9 @@ linha2_grafico = dbc.CardGroup(
                     figure=fig2
                     ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
+                        "Exportar", className="mt-auto", id='DownTop10', n_clicks=0
                     
-                    ),
+                    ), Download(id='downloadTop10'),
                 ]
             )
         )

@@ -18,7 +18,9 @@ from urllib.request import urlopen
 import sys
 sys.path.insert(1, 'C:/EasyDash/App'),
 import montaGraficoVendas as vendasGraf
-
+from plotly.io import write_image
+from dash_extensions import Download
+from dash_extensions.snippets import send_bytes
 
 
 
@@ -269,8 +271,8 @@ grafico1 = dbc.CardGroup(
                     figure=fig
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
+                        "Exportar", className="mt-auto", id='DownGraph1', n_clicks=0
+                    ), Download(id='downloadGraph1'),
                 ]
             ) 
             ], id = "Card1"
@@ -290,8 +292,8 @@ grafico2 = dbc.CardGroup(
                     figure=fig
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
+                        "Exportar", className="mt-auto", id='DownGraph2', n_clicks=0
+                    ), Download(id='downloadGraph2'),
                 ]
             ) 
             ], id = "Card2"
@@ -311,8 +313,8 @@ grafico3 = dbc.CardGroup(
                     figure=fig
                 ),
                     dbc.Button(
-                        "Exportar", className="mt-auto"
-                    ),
+                        "Exportar", className="mt-auto", id='DownGraph3', n_clicks=0
+                    ), Download(id='downloadGraph3'),
                 ]
             ) 
             ], id = "Card3"

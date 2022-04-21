@@ -12,7 +12,7 @@ layout = html.Div([
     }),
     ),
     html.Div(
-    dcc.Input(id="password", type="text", placeholder="Digite a senha",className="inputbox2",
+    dcc.Input(id="password", type="password", placeholder="Digite a senha",className="inputbox2",
     style={'margin-left':'35%','width':'450px','height':'45px','padding':'10px','margin-top':'10px',
     'font-size':'16px','border-width':'3px','border-color':'#a0a3a2',
     }),
