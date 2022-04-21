@@ -120,7 +120,7 @@ sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where s
 sql_sem3 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '16' and '22' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
 sql_sem4 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '23' and '31' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
   
-fig3=vendasGraf.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4)
+fig3=vendasGraf.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4, "03", "2022")
 
 
 fig4=vendasGraf.montaGraficoVxD("select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '2021' and substring(data_venda, 4, 2) = '03' group by data_venda")

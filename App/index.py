@@ -401,6 +401,32 @@ def input_output_vendas(dAno, dMes):
         fig = vGV.montaGraficoVxM(montaSql)
         return fig                      
 
+    def updateVxDxM(dAno, dMes):
+        
+        nMes = len(dMes)
+        nAno = len(dAno)
+        
+        #montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
+        if (nAno == 1):
+            
+            if (nMes > 1):
+                montaSql='select sum(cast(valor_produto as float)) as valor, substring(data_venda, 1, 2) as mes, substring(data_venda, 4, 2) as ano from historico_2jr'
+                montaSql += " where (substring(data_venda, 7, 4) = '"+dAno[0]+"')"
+                montaSql += ' and ('
+                for m in range(0, nMes):
+                    if (m != nMes-1): 
+                        montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                    else:
+                        montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"  
+
+                montaSql += ' GROUP BY substring(data_venda, 1, 2), substring(data_venda, 4, 2) ORDER BY substring(data_venda, 1, 2) ASC, substring(data_venda, 4, 2) ASC'
+                fig = vGV.montaGraficoVxDxM(montaSql)
+            else:
+                fig = ''    
+        else: 
+            fig = ''    
+        return fig
+
     def updateVxS(dAno, dMes):
             
             nMes = len(dMes)
@@ -410,8 +436,9 @@ def input_output_vendas(dAno, dMes):
                 sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '08' and '15' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
                 sql_sem3 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '16' and '22' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
                 sql_sem4 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '23' and '31' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
-                fig = vGV.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4)
-                print('monteiiiiiii')
+                mesRef, anoRef = dMes[0], dAno[0]
+                fig = vGV.montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4, mesRef, anoRef)
+                
             else:
                 fig = ''
             
@@ -421,40 +448,17 @@ def input_output_vendas(dAno, dMes):
         
         nMes = len(dMes)
         nAno = len(dAno)
-        atual = datetime.now()
-        mes = atual.strftime('%m')
-        ano = atual.strftime('%Y')
-        print (mes)
-        print (ano)
-        if nMes > 1:
-            montaSql = "select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '"+str(ano)+"' and substring(data_venda, 4, 2) = '"+str(mes)+"' group by data_venda"
-
-        else:    
-            montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'
-            if (nAno > 0):
-                montaSql += ' where '
-            else: 
-                montaSql = 'select data_venda, sum(cast(valor_produto as float)) from historico_2jr'    
-            for i in range(0, nAno):
-                if (i != nAno-1): 
-                    montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
-                else:
-                    montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"'"
-
-            if (nMes > 0):
-                if(nAno == 0):
-                    diasdisponiveis = ''
-                    return diasdisponiveis 
-                else:
-                    montaSql += ' and '
-                    for m in range(0, nMes):
-                        if (m != nMes-1): 
-                            montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
-                        else:
-                            montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"' GROUP BY data_venda  ORDER BY data_venda ASC"  
-
+        
+        
+        
+        if nMes == 1:
+            montaSql = "select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"' GROUP BY data_venda  ORDER BY data_venda ASC"
+            fig = vGV.montaGraficoVxD(montaSql)
+        else: 
+            fig = ''
+    
             
-        fig = vGV.montaGraficoVxD(montaSql)
+        
         return fig 
 
     def updateVxC(dAno, dMes):
@@ -500,6 +504,7 @@ def input_output_vendas(dAno, dMes):
     VxS = updateVxS(dAno, dMes)
     VxD = updateVxD(dAno, dMes) 
     VxC = updateVxC(dAno, dMes)
+    VxDxM = updateVxDxM(dAno, dMes)
     
     nAno = len(dAno)
     nMes = len(dMes) 
@@ -511,7 +516,7 @@ def input_output_vendas(dAno, dMes):
             
             return VxS, VxD, VxC, "Vendas x Semana (R$)", "Vendas x Dia (R$)", "Vendas x Canal (R$)"
         else:
-            return VxM, VxD, VxC, "Vendas x Mês (R$)", "Vendas x Dia (R$)", "Vendas x Canal (R$)"    
+            return VxM, VxDxM, VxC, "Vendas x Mês (R$)", "Vendas x Dia (R$)", "Vendas x Canal (R$)"    
     elif nMes == 1:
         
         return VxA, VxM, VxC, "Vendas x Ano (R$)", "Vendas x Mês (R$)", "Vendas x Canal (R$)"

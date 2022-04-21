@@ -53,9 +53,18 @@ def montaGraficoVxM(sql):
   # fig.show()
   return fig
 
-def montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4):
-  mesAtual = datetime.now().strftime('%m')
-  anoAtual = datetime.now().strftime('%Y')
+def montaGraficoVxDxM(sql):
+  VxM = fun.consulta_bd(sql)
+  df_vM = pd.DataFrame(VxM, columns=['Valor em R$','Dia','Mês'])
+  fig = px.line(df_vM, x="Dia", y="Valor em R$", color="Mês", markers=True)
+  fig.update_traces(textposition="bottom right")
+  #fig = px.area(df_vM, x="Mes", y="Valor", color="Ano", line_group="Ano", markers=True, fill='tozeroy')
+  # fig.show()
+  return fig
+
+
+def montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4, mesRef, anoRef):
+ 
   sem1 = fun.consulta_bd(sql_sem1)
   sem2 = fun.consulta_bd(sql_sem2)
   sem3 = fun.consulta_bd(sql_sem3)
@@ -85,10 +94,10 @@ def montaGraficoVxS(sql_sem1, sql_sem2, sql_sem3, sql_sem4):
     df_s4['Semana 4'][0] = int(df_s4['Semana 4'][0])
   dfsemana = pd.concat([df_s1, df_s2, df_s3, df_s4], axis=1)
   dfFinal = pd.DataFrame()
-  #dfsemana = pd.DataFrame("["+df_s1['Semana 1'][0]+ "," +df_s2['Semana 2'][0]+ "," +df_s3['Semana 3'][0]+","+df_s4['Semana 4'][0]+"]", columns=['Semana 1','Semana 2','Semana 3','Semana 4'])
+  #sql_sem1 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '01' and '07' and substring(data_venda, 7, 4) = '2022' and substring(data_venda, 4, 2) = '03'"
   
-  #fig = px.bar(dfsemana, x="Semana 1", title='Life expectancy in Canada')
-  fig = px.bar(y=[df_s1['Semana 1'][0],df_s2['Semana 2'][0],df_s3['Semana 3'][0],df_s4['Semana 4'][0]], x=['Semana 1', 'Semana 2', 'Semana 3','Semana 4'], title="Mês Referente:"+mesAtual)
+ 
+  fig = px.bar(y=[df_s1['Semana 1'][0],df_s2['Semana 2'][0],df_s3['Semana 3'][0],df_s4['Semana 4'][0]], x=['Semana 1', 'Semana 2', 'Semana 3','Semana 4'], title="Mês Referente:"+mesRef+'/'+anoRef)
 
   return fig
 
