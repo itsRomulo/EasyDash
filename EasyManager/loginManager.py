@@ -149,4 +149,4 @@ def criar():
         flash('o usuário ' + nome + ' já se encontra cadastrada no sistema. Por favor, tente outra.')
         return render_template('Novo.html')
 
-app.run(debug=True)            
+app.run(debug=True, port=5010)            

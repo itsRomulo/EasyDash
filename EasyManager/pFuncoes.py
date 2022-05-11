@@ -21,7 +21,7 @@ def diamesano():
 
 #===================================================================================================== 
 # Dados (Entrada)
-caminhoParam = '.\\00Entrada\\parameters.json'
+caminhoParam = 'C:\\EasyDash\\00Entrada\\parameters.json'
 param        = json_reader(caminhoParam)
 arqOrigem    = param['dados']['originPath']+diamesano()+'_2JR_Multimarcas.xlsx'
 
