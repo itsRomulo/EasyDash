@@ -159,3 +159,143 @@ def montaGraficoVxR(sql):
     width=1500,
     height=800)
   return fig
+
+def updateVxA(dAno):
+  nAno = len(dAno)
+  montaSql = "select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr"
+  #where substring(data_venda, 7, 4) = '2021' GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC"
+  if (nAno > 0):
+      montaSql += ' where '
+  else: 
+      montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr'    
+  for i in range(0, nAno):
+      if (i != nAno-1): 
+          montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+      else:
+          montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"' GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC"
+  return montaSql
+
+def updateVxM(dAno, dMes):
+  
+  nMes = len(dMes)
+  nAno = len(dAno)
+  montaSql='select sum(cast(valor_produto as float)) as valor, substring(data_venda, 4, 2) as mes, substring(data_venda, 7, 4) as ano from historico_2jr'
+  #montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
+  if (nAno > 0):
+      montaSql += ' where ('
+  else: 
+      montaSql = 'select sum(cast(valor_produto as float)) as valor, substring(data_venda, 4, 2) as mes, substring(data_venda, 7, 4) as ano from historico_2jr'    
+  for i in range(0, nAno):
+      if (i != nAno-1): 
+          montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+      else:
+          montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"')"
+
+  if (nMes > 0):
+      if(nAno == 0):
+          diasdisponiveis = ''
+          return diasdisponiveis 
+      else:
+          montaSql += ' and ('
+          for m in range(0, nMes):
+              if (m != nMes-1): 
+                  montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+              else:
+                  montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"  
+
+  montaSql += ' GROUP BY substring(data_venda, 4, 2), substring(data_venda, 7, 4) ORDER BY substring(data_venda, 4, 2) ASC, substring(data_venda, 7, 4) ASC'
+  
+  return montaSql                      
+
+def updateVxDxM(dAno, dMes):
+  
+  nMes = len(dMes)
+  nAno = len(dAno)
+  
+  #montaSql = 'select sum(cast(valor_produto as float)), substring(data_venda, 4, 2) from historico_2jr'
+  if (nAno == 1):
+      
+      if (nMes > 1):
+          montaSql='select sum(cast(valor_produto as float)) as valor, substring(data_venda, 1, 2) as mes, substring(data_venda, 4, 2) as ano from historico_2jr'
+          montaSql += " where (substring(data_venda, 7, 4) = '"+dAno[0]+"')"
+          montaSql += ' and ('
+          for m in range(0, nMes):
+              if (m != nMes-1): 
+                  montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+              else:
+                  montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"  
+
+          montaSql += ' GROUP BY substring(data_venda, 1, 2), substring(data_venda, 4, 2) ORDER BY substring(data_venda, 1, 2) ASC, substring(data_venda, 4, 2) ASC'
+          
+      else:
+          fig = ''    
+  else: 
+      fig = ''    
+  return montaSql
+
+def updateVxS(dAno, dMes):
+
+      nMes = len(dMes)
+      nAno = len(dAno)
+
+      if nAno == 1 and nMes == 1:
+          sql_sem1 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '01' and '07' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+          sql_sem2 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '08' and '15' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+          sql_sem3 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '16' and '22' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+          sql_sem4 = "select sum(cast(valor_produto as float)) from historico_2jr  where substring(data_venda, 1, 2) between '23' and '31' and substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"'"
+          mesRef, anoRef = dMes[0], dAno[0]
+          
+          
+      else:
+          fig = ''
+
+      return sql_sem1,sql_sem2,sql_sem3,sql_sem4
+
+def updateVxD(dAno, dMes):
+  
+  nMes = len(dMes)
+  nAno = len(dAno)
+  
+  if nMes == 1:
+      montaSql = "select data_venda, sum(cast(valor_produto as float)) from historico_2jr where substring(data_venda, 7, 4) = '"+dAno[0]+"' and substring(data_venda, 4, 2) = '"+dMes[0]+"' GROUP BY data_venda  ORDER BY data_venda ASC"
+  else: 
+      fig = ''
+
+  return montaSql
+
+def updateVxC(dAno, dMes):
+  
+  nMes = len(dMes)
+  nAno = len(dAno)
+  montaSql = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1' and ("
+  montaSql2 = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1' and ("
+  
+  if (nAno > 0):
+      pass
+  else: 
+      montaSql = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor = '1'"
+      montaSql2 = "select count(cod_vendedor) FROM historico_2jr where cod_vendedor <> '1'"   
+  for i in range(0, nAno):
+      if (i != nAno-1): 
+          montaSql +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+          montaSql2 +=  "substring(data_venda, 7, 4) = '"+dAno[i]+"' or "
+      else:
+          montaSql += "substring(data_venda, 7, 4) = '"+dAno[i]+"')"
+          montaSql2 += "substring(data_venda, 7, 4) = '"+dAno[i]+"')"
+
+  if (nMes > 0):
+      if(nAno == 0):
+          diasdisponiveis = ''
+          return diasdisponiveis 
+      else:
+          montaSql += ' and ('
+          montaSql2 += ' and ('
+          for m in range(0, nMes):
+              if (m != nMes-1): 
+                  montaSql +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+                  montaSql2 +=  "substring(data_venda, 4, 2) = '"+dMes[m]+"' or "
+              else:
+                  montaSql += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"
+                  montaSql2 += "substring(data_venda, 4, 2) = '"+dMes[m]+"')"   
+  
+  return montaSql,montaSql2
