@@ -9,7 +9,7 @@ from App import montaGraficoVendas as mgv
 from App import montaGraficoPedidos as mgp
 
 
-chave_api = '5076086619:AAEdhNbePnEbzxo0fa6xPCOgeo-2H9cTxGs' #BOT Joao
+chave_api = '5340300868:AAE8NTLKHXokGtQkSlSUcw0PwcZW3X2mgSY' #BOT Joao
 #chave_api = '1966930533:AAExVlWlDPfrkZYnzLDjs3kmZgeKPyYZ8dM'
 bot = telebot.TeleBot(chave_api)
 meu_id = '1116879369'
@@ -90,17 +90,17 @@ def start(update, context): # welcome message
 
 #=================================================================================================
 def chatid(update, context): # Send chatid message
-    mensagem = 'Olá '+str(update.message.chat.first_name)+', tudo bem? O seu chat id é '+str(update.message.chat.id)+'.'
+    mensagem = 'Olá '+str(update.message.chat.first_name)+', tudo bem? O seu chat id é '+str(update.message.chat.id)+'. 😁'
     update.message.reply_text(mensagem)
 
 #=================================================================================================
 def oif(update, context): # Send chatid message
-    mensagem = 'Olá '+str(update.message.chat.first_name)+', eu sou o bot EasyDash, seu amigo para informações rápidas! \n Digite /menu para mostrar as opções'
+    mensagem = 'Olá '+str(update.message.chat.first_name)+', eu sou o bot EasyDash, seu amigo para informações rápidas! \n Digite /menu para mostrar as opções 📊'
     update.message.reply_text(mensagem)
 
 #================================================================================================= 
 def menu(update,context):
-    menu_markup = telegram.ReplyKeyboardMarkup([["VxA","VxM"],["VxS","VxD"],["VxC","PxC"],["PxM","Top10"]], one_time_keyboard=True, resize_keyboard=True)
+    menu_markup = telegram.ReplyKeyboardMarkup([["Vendas/Ano","Vendas/Mes"],["Vendas/Semana","Vendas/Dia"],["Vendas/Canal","Produtos/Canal"],["Produtos/Mes","Top10"]], one_time_keyboard=True, resize_keyboard=True)
     update.message.reply_text('Faça sua escolha, \n caso o menu não apareca clique no botão abaixo ao lado do clips ',reply_markup=menu_markup)
 
 #=================================================================================================
@@ -109,14 +109,14 @@ def texto(update, context):
     global ultima
     if ultima == '':
         pass
-    elif ultima == 'VxA':
+    elif ultima == 'Vendas/Ano':
         msg = msg.split(',')
         montasql=mgv.updateVxA(msg)
         grafico = mgv.montaGraficoVxA(montasql)
         grafico.write_image('VxA.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('VxA.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'VxM':
+    elif ultima == 'Vendas/Mes':
         msg=msg.split('/')
         ano=msg[0].split(',')
         mes=msg[1].split(',')
@@ -125,7 +125,7 @@ def texto(update, context):
         grafico.write_image('VxM.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('VxM.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'VxS':
+    elif ultima == 'Vendas/Semana':
         msg=msg.split('/')
         ano=msg[0]
         mes=msg[1]
@@ -136,7 +136,7 @@ def texto(update, context):
         grafico.write_image('VxS.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('VxS.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'VxD':
+    elif ultima == 'Vendas/Dia':
         msg=msg.split('/')
         ano=msg[0]
         mes=msg[1]
@@ -147,7 +147,7 @@ def texto(update, context):
         grafico.write_image('VxD.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('VxD.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'VxC':
+    elif ultima == 'Vendas/Canal':
         msg=msg.split('/')
         ano=msg[0].split(',')
         mes=msg[1].split(',')
@@ -156,7 +156,7 @@ def texto(update, context):
         grafico.write_image('VxC.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('VxC.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'PxC':
+    elif ultima == 'Produtos/Canal':
         msg=msg.split('/')
         ano=msg[0].split(',')
         mes=msg[1].split(',')
@@ -165,7 +165,7 @@ def texto(update, context):
         grafico.write_image('PxC.png')
         bot.send_photo(chat_id=update.message.chat.id,photo=open('PxC.png','rb')) # send to telegram graphic image
         ultima=''
-    elif ultima == 'PxM':
+    elif ultima == 'Produtos/Mes':
         msg=msg.split('/')
         ano=msg[0].split(',')
         mes=msg[1].split(',')
@@ -184,44 +184,44 @@ def texto(update, context):
         bot.send_photo(chat_id=update.message.chat.id,photo=open('Top10.png','rb')) # send to telegram graphic image
         ultima=''
 
-    if 'VxA' in msg:
+    if 'Vendas/Ano' in msg:
         mensagem = '''Escolha os anos que deseja filtrar.
                       Exemplo: 2019,2021,2022'''
         update.message.reply_text(mensagem)
-        ultima='VxA'
+        ultima='Vendas/Ano'
         # grafico = mgv.montaGraficoVxA('select sum(cast(valor_produto as float)), substring(data_venda, 7, 4) from historico_2jr GROUP BY substring(data_venda, 7, 4) ORDER BY substring(data_venda, 7, 4) ASC')
         # grafico.write_image('VxA.png')
         # bot.send_photo(chat_id=update.message.chat.id,photo=open('VxA.png','rb')) # send to telegram graphic image
-    elif 'VxM' in msg:
+    elif 'Vendas/Mes' in msg:
         mensagem = '''Escolha os anos e meses que deseja filtrar.
                       Exemplo: 2019,2021/02,03'''
         update.message.reply_text(mensagem)
-        ultima='VxM'
-    elif 'VxS' in msg:
+        ultima='Vendas/Mes'
+    elif 'Vendas/Semana' in msg:
         mensagem = '''Escolha o ano e o mês que deseja filtrar.
                       Exemplo: 2022/03'''
         update.message.reply_text(mensagem)
-        ultima='VxS'
-    elif 'VxD' in msg:
+        ultima='Vendas/Semana'
+    elif 'Vendas/Dia' in msg:
         mensagem = '''Escolha o ano e o mês que deseja filtrar.
                       Exemplo: 2022/03'''
         update.message.reply_text(mensagem)
-        ultima='VxD'
-    elif 'VxC' in msg:
+        ultima='Vendas/Dia'
+    elif 'Vendas/Canal' in msg:
         mensagem = '''Escolha os anos e meses que deseja filtrar.
                       Exemplo: 2019,2021/02,03'''
         update.message.reply_text(mensagem)
-        ultima='VxC'
-    elif 'PxC' in msg:
+        ultima='Vendas/Canal'
+    elif 'Produtos/Canal' in msg:
         mensagem = '''Escolha os anos e meses que deseja filtrar.
                       Exemplo: 2019,2021/02,03'''
         update.message.reply_text(mensagem)
-        ultima='PxC'
-    elif 'PxM' in msg:
+        ultima='Produtos/Canal'
+    elif 'Produtos/Mes' in msg:
         mensagem = '''Escolha os anos e meses que deseja filtrar.
                       Exemplo: 2019,2021/02,03'''
         update.message.reply_text(mensagem)
-        ultima='PxM'
+        ultima='Produtos/Mes'
     elif 'Top10' in msg:
         mensagem = '''Escolha os anos e meses que deseja filtrar.
                       Exemplo: 2019,2021/02,03'''
